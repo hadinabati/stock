@@ -6,9 +6,11 @@ from base.so_base import ObjectId, Model
 class Create(Model):
     name: Optional[str]
     description: Optional[str]
+    info: Optional[list]
 
 
 class Items(Model):
+    info: Optional[list]
     name: Optional[str]
     description: Optional[str]
     id: Optional[ObjectId]
