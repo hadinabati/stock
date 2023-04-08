@@ -2,7 +2,7 @@
   <q-layout view="lHh Lpr lFf" style="direction: rtl">
     <q-header elevated >
       <q-toolbar>
-        <q-btn class="headers" flat label="ثبت کالا" style="width: 8rem">
+        <q-btn class="headers" flat  dense  label="ثبت کالا" style="width: 8rem">
         <q-menu fit >
           <q-list style="min-width: 100px">
             <q-item clickable v-close-popup>
@@ -12,7 +12,7 @@
               <q-item-section class="sub_headers" @click="this.change_route('Position')">ثبت واحد</q-item-section>
             </q-item>
             <q-item clickable v-close-popup>
-              <q-item-section class="sub_headers">ثبت افراد</q-item-section>
+              <q-item-section class="sub_headers" @click="this.change_route('person')">ثبت افراد</q-item-section>
             </q-item>
             <q-item clickable v-close-popup>
               <q-item-section class="sub_headers" @click="this.change_route('Grade')">ثبت درجات نظامی</q-item-section>
@@ -23,13 +23,70 @@
           </q-list>
         </q-menu>
         </q-btn>
-        <q-btn flat  class="absolute-left" label="مشخصات">
+        <q-btn class="headers" flat dense label="دسترسی ها" style="width: 8rem">
+          <q-menu fit >
+            <q-list style="min-width: 100px">
+              <q-item clickable v-close-popup>
+                <q-item-section class="sub_headers" @click="this.change_route('create_role')">ایجاد دسترسی</q-item-section>
+              </q-item>
+              <q-item clickable v-close-popup>
+                <q-item-section class="sub_headers" @click="this.change_route('roles')">دسترسی های ثبت شده</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
+        <q-btn class="headers" flat dense label="فعالیت " style="width: 8rem">
+          <q-menu fit >
+            <q-list style="min-width: 100px">
+              <q-item clickable v-close-popup>
+                <q-item-section class="sub_headers" @click="this.change_route('Position')">ثبت گردشکار</q-item-section>
+              </q-item>
+              <q-item clickable v-close-popup>
+                <q-item-section class="sub_headers" @click="this.change_route('person')">ثبت نوع گردشکاری</q-item-section>
+              </q-item>
+              <q-item clickable v-close-popup>
+                <q-item-section class="sub_headers" @click="this.change_route('Grade')">لیست نوع گردشکاری</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
+        <q-btn class="headers" flat dense label="گزارشات" style="width: 8rem">
+          <q-menu fit >
+            <q-list style="min-width: 100px">
+              <q-item clickable v-close-popup>
+                <q-item-section class="sub_headers">گزارشات کالا</q-item-section>
+              </q-item>
+              <q-item clickable v-close-popup>
+                <q-item-section class="sub_headers" @click="this.change_route('Position')">گزارشات افراد</q-item-section>
+              </q-item>
+              <q-item clickable v-close-popup>
+                <q-item-section class="sub_headers" @click="this.change_route('person')">گزارشات واحد ها</q-item-section>
+              </q-item>
+              <q-item clickable v-close-popup>
+                <q-item-section class="sub_headers" @click="this.change_route('Grade')">گزارشات درجات</q-item-section>
+              </q-item>
+              <q-item clickable v-close-popup>
+                <q-item-section class="sub_headers"  @click="this.change_route('Category')">گزارشات دسته بندی</q-item-section>
+              </q-item>
+              <q-item clickable v-close-popup>
+                <q-item-section class="sub_headers"  @click="this.change_route('Category')">گزارشات فعالیت های روزانه</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
+        <q-btn flat dense  class="absolute-left" label="مشخصات">
           <q-menu>
-            <div class="row no-wrap q-pa-md">
+            <div class="row no-wrap q-pa-md ">
               <div class="column">
-                <div class="text-h6 q-mb-md">Settings</div>
-                <q-toggle v-model="mobileData" label="Use Mobile Data" />
-                <q-toggle v-model="bluetooth" label="Bluetooth" />
+                <div class="text-h6 q-mb-md" style="font-family: iransans_b">تنظیمات</div>
+                <q-btn
+                  color="pink-6"
+                  label="خروج"
+                  style="font-family: Ahang_r"
+                  push
+                  size="sm"
+                  v-close-popup
+                />
               </div>
 
               <q-separator vertical inset class="q-mx-lg" />
@@ -39,15 +96,9 @@
                   <img src="https://cdn.quasar.dev/img/avatar4.jpg">
                 </q-avatar>
 
-                <div class="text-subtitle1 q-mt-md q-mb-xs">John Doe</div>
+                <div style="font-family: iransans_r" class="text-subtitle2 q-mt-md q-mb-xs">هادی نباتی</div>
+                <div style="font-family: iransans_r" class="text-subtitle2 q-mt-md q-mb-xs">کاربر عادی</div>
 
-                <q-btn
-                  color="primary"
-                  label="Logout"
-                  push
-                  size="sm"
-                  v-close-popup
-                />
               </div>
             </div>
           </q-menu>
@@ -87,6 +138,7 @@ export default defineComponent({
 .headers{
   font-family: Ahang_b;
   font-size: 13pt;
+
 
 }
 .sub_headers{

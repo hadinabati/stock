@@ -1,6 +1,8 @@
 import PositionPage from "pages/PositionPage.vue";
 import GradePage from "pages/GradePage.vue";
 import CategoryPage from "pages/CategoryPage.vue";
+import person from "pages/person.vue";
+import RolePage from "pages/RolePage.vue";
 
 const routes = [
   {
@@ -10,7 +12,9 @@ const routes = [
       {path: '', component: () => import('pages/IndexPage.vue')},
       {path: '/Position', component:PositionPage},
       {path: '/Grade', component:GradePage},
-      {path: '/Category' , component:CategoryPage}
+      {path: '/Category' , component:CategoryPage},
+      {path:'/person'  , component:person},
+      {path: '/create_role' , component:RolePage}
     ]
   },
 

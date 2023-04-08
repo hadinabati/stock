@@ -37,4 +37,8 @@ export default defineComponent({
   margin-left: 30%;
 
 }
+span{
+  font-family: iransans_r;
+  text-align: center;
+}
 </style>

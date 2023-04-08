@@ -9,16 +9,19 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
-    "axios": "^0.21.1",
-    "vuex": "^4.0.1",
+    "@alireza-ab/persian-date": "^2.6.2",
+    "@persian-tools/persian-tools": "^3.4.1",
     "@quasar/extras": "^1.0.0",
+    "axios": "^0.21.1",
     "quasar": "^2.6.0",
     "vue": "^3.0.0",
-    "vue-router": "^4.0.0"
+    "vue-router": "^4.0.0",
+    "vuex": "^4.0.1"
   },
   "devDependencies": {
     "@quasar/app-vite": "^1.0.0",
     "autoprefixer": "^10.4.2",
+    "persian-date": "^0.3.1-b",
     "postcss": "^8.4.14"
   },
   "engines": {

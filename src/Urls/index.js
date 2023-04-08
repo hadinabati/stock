@@ -30,4 +30,33 @@ export  default class urls{
   Category_create(){
     return this.main + 'category/create'
   }
+  person_create(){
+    return this.main + 'person/create'
+  }
+  person_list(){
+    return this.main + 'person/list'
+  }
+
+  person_active(){
+    return this.main + 'person/active'
+  }
+  person_delete(){
+    return this.main + 'person/delete'
+  }
+  person_update(){
+    return this.main + 'person/update'
+  }
+
+  role_create(){
+    return this.main + 'role/create'
+  }
+
+  route_list(){
+    return this.main + 'routes/lists'
+  }
+  route_update(){
+    return this.main + 'routes/check'
+  }
+
+
 }
