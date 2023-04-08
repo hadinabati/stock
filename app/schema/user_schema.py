@@ -1,27 +1,27 @@
 from typing import Optional, List
 
-from pydantic import BaseModel, Field
+from pydantic import  Field
 
-from base.so_base import ObjectId
+from base.so_base import ObjectId ,Model
 
 
-class user_show(BaseModel):
+class user_show(Model):
     id: Optional[ObjectId] = Field()
     username: str
     role: Optional[List[str]]
 
 
-class Credentials(BaseModel):
+class Credentials(Model):
     username: str
     password: str
 
 
-class LoginSchema(BaseModel):
+class LoginSchema(Model):
     username: str = Field(default='str', description='username')
     passwords: str = Field(default='str', description='the passwords')
 
 
-class Profile(BaseModel):
+class Profile(Model):
     name: Optional[str] = Field(default='name')
     fname : Optional[str] = Field(default='name')
     username: Optional[str] = Field(default='username')
@@ -37,10 +37,14 @@ class Register(LoginSchema):
     role: List[ObjectId]
 
 
-class Show(BaseModel):
+class Show(Model):
     username: Optional[str] = Field()
     profile: Profile
     Error: Optional[bool] = False
     rele: Optional[List[str]]
     create_at: Optional[str]
     create_at: Optional[str]
+
+class Response(Model):
+    Done: Optional[bool]
+    ErrorMessage: Optional[str]

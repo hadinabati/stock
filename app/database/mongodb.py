@@ -7,6 +7,7 @@ grade_collection = database['Grade']
 position_collection = database['Position']
 stock_collection = database['Stock']
 category_collection = database['Category']
-
+route_collection = database['routes']
+roles_collection = database['roles']
 
 
