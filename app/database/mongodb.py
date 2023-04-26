@@ -9,5 +9,7 @@ stock_collection = database['Stock']
 category_collection = database['Category']
 route_collection = database['routes']
 roles_collection = database['roles']
+activity_collection = database['activity']
+repair_collection  = database['repair']
 
 

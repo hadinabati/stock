@@ -24,7 +24,7 @@ class Create(Model):
     position_id: Optional[ObjectId]
     has_response: Optional[bool]
     stock_number: Optional[int]
-    info: Optional[list[dict]]
+    info: Optional[list]
 
 
 class Update(Model):
