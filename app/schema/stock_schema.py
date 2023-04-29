@@ -15,16 +15,13 @@ class HistoryItem(Model):
 class Create(Model):
     name: Optional[str] = Field(default='name')
     is_consumer: Optional[bool]
-    create_date: Optional[str]
-    category_id: Optional[ObjectId]
-    response_id: Optional[ObjectId]
-    active: Optional[bool]
-    repair_history: Optional[list]
-    update_history: Optional[list]
-    position_id: Optional[ObjectId]
+    category_id: Optional[str]
+    response_id: Optional[str]
+    position_id: Optional[str]
     has_response: Optional[bool]
     stock_number: Optional[int]
-    info: Optional[list[dict]]
+    info: Optional[list]
+    count :Optional[int]
 
 
 class Update(Model):
@@ -39,6 +36,7 @@ class Update(Model):
     stock_number: Optional[int]
     info: Optional[list]
     old_stock_number: Optional[int]
+    count :Optional[int]
 
 
 class Response(Model):
@@ -68,6 +66,8 @@ class Item(Model):
     id: Optional[ObjectId]
     info: Optional[list]
     update_history: Optional[list]
+    count :Optional[int]
+    properties :Optional[list]
 
 
 class Lists(Model):

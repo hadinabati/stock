@@ -32,3 +32,6 @@ class VariablesMongoDb:
     tags = 'tags'
     description = 'description'
     items = 'items'
+    role_name = 'role_name'
+    info = "info"
+    super_admin = 'super_admin'

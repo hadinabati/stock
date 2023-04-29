@@ -2,12 +2,12 @@
 # from base import checking
 import datetime
 
-from fastapi import APIRouter
-from Time import local_time
-from instances import Mongo as variables
-from database import mongodb as db
-from schema import stock_schema as model
 from bson import ObjectId
+from fastapi import APIRouter
+
+from database import mongodb as db
+from instances import Mongo as variables
+from schema import stock_schema as model
 
 # from base.depency import basic_authenticate, Token, create_access_token, permissions
 
@@ -36,9 +36,24 @@ async def create(item: model.Create):
             return response.dict()
         else:
             data = item.dict()
+            data[name.category_id] = ObjectId(item.category_id)
             data[name.repair_history] = []
             data[name.update_history] = []
+            data[name.active] = True
             data[name.create_date] = datetime.datetime.now()
+
+            if item.has_response is True:
+                person_data = db.User_collection.find_one({name.id: ObjectId(item.response_id)})
+
+                data[name.response_id] = ObjectId(item.response_id)
+                data[name.position_id] = ObjectId(person_data[name.position_id])
+            else:
+                super_admin_data = db.User_collection.find_one({
+                    name.name: name.super_admin
+                })
+                data[name.response_id] = ObjectId(super_admin_data[name.id])
+                data[name.position_id] = ObjectId(item.position_id)
+
             res = db.stock_collection.insert_one(data).acknowledged
             if res:
                 response.Done = True
@@ -202,6 +217,14 @@ async def lists():
                 "foreignField": "_id",
                 "as": "position_name"
             }
+        },
+        {
+            "$lookup": {
+                "from": "User",
+                "localField": "response_id",
+                "foreignField": "_id",
+                "as": "response_name"
+            }
         }
     ]
     data = db.stock_collection.aggregate(pipeline=pipline)
@@ -223,9 +246,102 @@ async def lists():
         items.info = item['info']
         items.update_history = item['update_history']
         items.category_name = item["category_name"][0]['name']
-        # items.response_name = item["response_name"][0]['name']
-        items.response_name = ''
+        items.properties = item["category_name"][0]['info']
+        items.response_name = item["response_name"][0]['name'] + ' -' + item["response_name"][0]['family']
         items.position_name = item["position_name"][0]['name']
+        items.count = item['count']
+        final_data.append(items.dict())
+    response.items = final_data
+    return response.dict()
+
+
+@router.get('/list_single', response_model=model.Lists)
+async def single_list(text: str):
+    pipeline = [
+        {
+            u"$lookup": {
+                u"from": u"Position",
+                u"localField": u"position_id",
+                u"foreignField": u"_id",
+                u"as": u"position_name"
+            }
+        },
+        {
+            u"$lookup": {
+                u"from": u"Category",
+                u"localField": u"category_id",
+                u"foreignField": u"_id",
+                u"as": u"category_name"
+            }
+        },
+        {
+            u"$lookup": {
+                u"from": u"User",
+                u"localField": u"response_id",
+                u"foreignField": u"_id",
+                u"as": u"response_name"
+            }
+        },
+        {
+            u"$match": {
+                u"$or": [
+                    {
+                        u"name": {
+                            "$regex": text
+                        }
+                    },
+                    {
+                        u"count": {
+                            "$regex": text
+                        }
+                    },
+                    {
+                        u"position_name.0.name": {
+                            "$regex": text
+                        }
+                    },
+                    {
+                        u"category_name.0.name": {
+                            "$regex": text
+                        }
+                    },
+                    {
+                        u"response_name.0.name": {
+                            "$regex": text
+                        }
+                    },
+                    {
+                        u"response_name.0.family": {
+                            "$regex": text
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+    data = db.stock_collection.aggregate(pipeline=pipeline)
+    response = model.Lists()
+    final_data = []
+    for item in data:
+        items = model.Item()
+        items.id = item['_id']
+        items.name = item['name']
+        items.is_consumer = item['is_consumer']
+        items.create_date = item['create_date']
+        items.category_id = item['category_id']
+        items.response_id = item['response_id']
+        items.active = item['active']
+        items.repair_history = item['repair_history']
+        items.position_id = item['position_id']
+        items.has_response = item['has_response']
+        items.stock_number = item['stock_number']
+        items.info = item['info']
+        items.update_history = item['update_history']
+        items.category_name = item["category_name"][0]['name']
+        items.properties = item["category_name"][0]['info']
+        items.response_name = item["response_name"][0]['name'] + ' -' + item["response_name"][0]['family']
+        items.position_name = item["position_name"][0]['name']
+        items.count = item['count']
         final_data.append(items.dict())
     response.items = final_data
     return response.dict()

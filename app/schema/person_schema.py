@@ -9,7 +9,7 @@ class Create(Model):
     national_code: Optional[str]
     position_id: Optional[ObjectId]
     grade_id: Optional[ObjectId]
-    role: Optional[list]
+    role: Optional[ObjectId]
 
 
 class Update(Model):
@@ -19,7 +19,7 @@ class Update(Model):
     national_code: Optional[str]
     position_id: Optional[ObjectId]
     grade_id: Optional[ObjectId]
-    role: Optional[list]
+    role: Optional[ObjectId]
 
 
 class Delete(Model):
@@ -35,7 +35,8 @@ class Lists(Model):
     position_name: Optional[str]
     grade_name: Optional[str]
     grade_id: Optional[ObjectId]
-    role: Optional[list]
+    role: Optional[ObjectId]
+    role_name :Optional[str]
     active: Optional[bool]
     update_history: Optional[list]
 
