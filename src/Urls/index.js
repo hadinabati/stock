@@ -50,12 +50,38 @@ export  default class urls{
   role_create(){
     return this.main + 'role/create'
   }
+  role_list(){
+    return this.main + 'role/lists'
+  }
+  role_deleted(){
+    return this.main + 'role/deleted'
+  }
+  role_activated(){
+    return this.main + 'role/activated'
+  }
 
   route_list(){
     return this.main + 'routes/lists'
   }
   route_update(){
     return this.main + 'routes/check'
+  }
+
+  stock_create(){
+    return this.main + 'stock/create'
+  }
+  stock_list(){
+    return this.main + 'stock/list'
+  }
+  stock_list_single(){
+    return this.main + 'stock/list_single'
+  }
+
+  activities_create(){
+    return this.main + 'activities/create'
+  }
+  activities_list(){
+    return this.main + 'activities/list'
   }
 
 

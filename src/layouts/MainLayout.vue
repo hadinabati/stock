@@ -2,11 +2,12 @@
   <q-layout view="lHh Lpr lFf" style="direction: rtl">
     <q-header elevated >
       <q-toolbar>
-        <q-btn class="headers" flat  dense  label="ثبت کالا" style="width: 8rem">
+        <q-btn class="headers" flat dense label="خانه"   @click="this.change_route('/')"></q-btn>
+        <q-btn class="headers" flat  dense  label="ثبت " style="width: 8rem">
         <q-menu fit >
           <q-list style="min-width: 100px">
             <q-item clickable v-close-popup>
-              <q-item-section class="sub_headers">ثبت کالا</q-item-section>
+              <q-item-section @click="this.change_route('stock')" class="sub_headers">ثبت کالا</q-item-section>
             </q-item>
             <q-item clickable v-close-popup>
               <q-item-section class="sub_headers" @click="this.change_route('Position')">ثبت واحد</q-item-section>
@@ -23,6 +24,15 @@
           </q-list>
         </q-menu>
         </q-btn>
+        <q-btn class="headers" flat  dense  label="مشاهده " style="width: 8rem">
+          <q-menu fit >
+            <q-list style="min-width: 100px">
+              <q-item clickable v-close-popup>
+                <q-item-section @click="this.change_route('products')" class="sub_headers">مشاهده کالا</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
         <q-btn class="headers" flat dense label="دسترسی ها" style="width: 8rem">
           <q-menu fit >
             <q-list style="min-width: 100px">
@@ -30,7 +40,7 @@
                 <q-item-section class="sub_headers" @click="this.change_route('create_role')">ایجاد دسترسی</q-item-section>
               </q-item>
               <q-item clickable v-close-popup>
-                <q-item-section class="sub_headers" @click="this.change_route('roles')">دسترسی های ثبت شده</q-item-section>
+                <q-item-section class="sub_headers" @click="this.change_route('role_list')">دسترسی های ثبت شده</q-item-section>
               </q-item>
             </q-list>
           </q-menu>
@@ -42,7 +52,7 @@
                 <q-item-section class="sub_headers" @click="this.change_route('Position')">ثبت گردشکار</q-item-section>
               </q-item>
               <q-item clickable v-close-popup>
-                <q-item-section class="sub_headers" @click="this.change_route('person')">ثبت نوع گردشکاری</q-item-section>
+                <q-item-section class="sub_headers" @click="this.change_route('repair_create')">ثبت نوع گردشکاری</q-item-section>
               </q-item>
               <q-item clickable v-close-popup>
                 <q-item-section class="sub_headers" @click="this.change_route('Grade')">لیست نوع گردشکاری</q-item-section>

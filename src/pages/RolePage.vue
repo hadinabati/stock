@@ -26,6 +26,10 @@
                rounded label-color="white" color="light-blue-10" outlined dense></q-btn>
       </div>
     </div>
+    <div class="col-md-3 col-xs-12">
+      <q-btn class="text absolute-bottom full-width q-mt-lg " @click="update" style="height: 80px" color="grey-10"
+             text-color="white" label="بروز رسانی"></q-btn>
+    </div>
 
   </div>
 </template>
@@ -85,6 +89,7 @@ export default {
 
     Routes()
     return {
+      Routes,
       info,
       address,
       route_chose,
@@ -105,7 +110,7 @@ export default {
   methods: {
     insert() {
       if (this.info.name !== '') {
-        if (this.route_chose.length === 0 || this.route_chose.includes(undefined) ) {
+        if (this.route_chose.length === 0 || this.route_chose.includes(undefined)) {
           this.toast('می بایست تنها روی زیر منو ها کلیک کنید ', 'pink-6', 'white')
         } else {
           axios.post(this.address.role_create(), {
@@ -117,7 +122,7 @@ export default {
             } else {
               this.toast(response.data.ErrorMessage, 'pink-6', 'white')
             }
-          }).catch(()=>{
+          }).catch(() => {
             this.toast('خطا در سرور', 'pink-6', 'white')
           })
 
@@ -126,6 +131,21 @@ export default {
       } else {
         this.toast('لطفا قسمت نام را کامل کنید', 'pink-6', 'white')
       }
+    },
+    update() {
+      axios.post(this.address.route_update()).then(res => {
+        if (res.data.Done) {
+          this.Routes()
+          this.toast('عملیات با موفقیت انجام شد', 'green-9', 'white')
+        } else {
+          this.toast('خطای داخلی سرور', 'pink-6', 'white')
+        }
+      }).catch(
+        () => {
+          this.toast('خطای داخلی سرور', 'pink-6', 'white')
+        }
+      )
+
     }
   }
 }

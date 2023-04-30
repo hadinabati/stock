@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="col-md-12 col-xs-12">
-      <p class="headers q-mt-lg">ثبت دسته بندی کالا های انبار</p>
+      <p class="headers q-mt-lg">ثبت افراد</p>
     </div>
 
 
@@ -49,6 +49,16 @@
           </div>
 
         </div>
+        <div class="col-md-12 col-xs-12">
+          <div class="full-width q-mt-lg q-mb-md">
+            <label class="labels"> دسترسی </label>
+            <q-select v-model="data.role" :loading="info.loading_roles"
+                      :options="info.roles" option-value="id" option-label="name" dense color="green-9" outlined
+                      square class="inputs" input-style="text-align: center ;">
+            </q-select>
+          </div>
+
+        </div>
 
         <div class="full-width q-mt-lg">
           <q-btn class="inputs" color="indigo-10" @click="save" label="ثبت افراد"></q-btn>
@@ -63,10 +73,12 @@
                  class="q-mt-md q-mb-md text col-md-9"
                  input-style="text-align: center"
                  square rounded label-color="black" color="green-9" outlined dense></q-input>
-        <q-btn style="width: 20%" @click="search" label="مشاهده" type="text" maxlength="100" class="q-mt-md q-mb-md text col-md-3"
+        <q-btn style="width: 20%" @click="search" label="مشاهده" type="text" maxlength="100"
+               class="q-mt-md q-mb-md text col-md-3"
                input-style="text-align: center"
                square rounded label-color="black" color="green-9" outlined dense></q-btn>
-        <table class="q-table q-ma-xs q-table--bordered q-table--dense q-table--grid q-table--flat" style="font-size: 10pt">
+        <table class="q-table q-ma-xs q-table--bordered q-table--dense q-table--grid q-table--flat"
+               style="font-size: 10pt">
           <thead>
           <tr>
             <td style="width: 4%">ردیف</td>
@@ -141,8 +153,6 @@
   <q-dialog
     style="direction: rtl"
     v-model="history.history_dialog"
-    full-width
-
   >
     <q-card style="width: 600px">
       <q-card-section>
@@ -189,7 +199,7 @@
   >
     <q-card style="width: 600px">
       <q-card-section>
-        <div class="text-h6 headers ">تاریخچه تغییرات</div>
+        <div class="text-h6 headers "> مشاهده نقش</div>
       </q-card-section>
 
       <q-card-section class="q-pt-none">
@@ -257,6 +267,16 @@
             </div>
 
           </div>
+          <div class="col-md-12">
+            <div class="full-width q-mt-lg q-mb-md">
+              <label class="labels"> نقش مربوطه - {{ person_list.data[update.index].role_name }} </label>
+              <q-select v-model="update.role" :loading="info.loading_roles"
+                        :options="info.roles" option-value="id" option-label="name" dense color="green-9" outlined
+                        square class="inputs" input-style="text-align: center ;">
+              </q-select>
+            </div>
+
+          </div>
 
           <div class="full-width q-mt-lg">
             <q-btn class="inputs" color="indigo-10" @click="update_btn" label="ثبت تغییرات"></q-btn>
@@ -291,14 +311,16 @@ export default {
       national_code: '',
       position_id: '',
       grade_id: '',
-      role: ['user']
+      role: ''
 
     })
     const info = reactive({
       positions: [],
       grades: [],
+      roles: [],
       loading_position: true,
-      loading_grades: true
+      loading_grades: true,
+      loading_roles: true
     })
     const person_list = reactive({
       data: [],
@@ -328,12 +350,16 @@ export default {
       national_code: "",
       position_id: "",
       grade_id: "",
-      role: [],
+      role:'',
       dialog: false
     })
+    const role_show = reactive([])
 
     function get_grade_position() {
 
+      info.roles.splice(0, info.roles.length)
+      info.grades.splice(0, info.grades.length)
+      info.positions.splice(0, info.positions.length)
       axios.get(address.position_list()).then(response => {
         for (let i = 0; i < response.data.item.length; i++) {
           info.positions.push({
@@ -350,6 +376,15 @@ export default {
             id: response.data.item[i].id
           })
           info.loading_grades = false
+        }
+      })
+      axios.get(address.role_list()).then(response => {
+        for (let i = 0; i < response.data.data.length; i++) {
+          info.roles.push({
+            name: response.data.data[i].name,
+            id: response.data.data[i].id
+          })
+          info.loading_roles = false
         }
       })
     }
@@ -371,7 +406,9 @@ export default {
               "role": response.data.data[i].role,
               "active": response.data.data[i].active,
               "update_history": response.data.data[i].update_history,
-              "last_update": response.data.data[i].last_update
+              "last_update": response.data.data[i].last_update,
+              "role_name":response.data.data[i].role_name
+
 
             })
           }
@@ -387,6 +424,7 @@ export default {
     get_grade_position()
 
     return {
+      role_show,
       update,
       history,
       roles,
@@ -422,7 +460,7 @@ export default {
           "national_code": this.data.national_code,
           "position_id": this.data.position_id.id,
           "grade_id": this.data.grade_id.id,
-          "role": this.data.role
+          "role": this.data.role.id
         }).then(response => {
           if (response.data.Done) {
             this.toast('عملیات با موفقیت انجام شد', 'green-9', 'white')
@@ -431,6 +469,7 @@ export default {
             this.data.national_code = ''
             this.data.grade_id = ''
             this.data.position_id = ''
+            this.data.role = ''
             this.lists()
           }
         })
@@ -482,7 +521,6 @@ export default {
     },
     update_btn() {
       const address = new urls()
-      console.log(this.update)
       axios.put(address.person_update(), {
         "id": this.update.id,
         "name": this.update.name,
@@ -490,9 +528,7 @@ export default {
         "national_code": this.update.national_code,
         "position_id": this.update.position_id.id,
         "grade_id": this.update.grade_id.id,
-        "role": [
-          "user"
-        ]
+        "role":this.update.role.id
       }).then(response => {
         if (response.data.Done) {
           this.update.index = -1
