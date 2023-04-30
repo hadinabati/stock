@@ -32,6 +32,20 @@ class VariablesMongoDb:
     tags = 'tags'
     description = 'description'
     items = 'items'
+
     role_name = 'role_name'
     info = "info"
     super_admin = 'super_admin'
+
+    properties = 'properties'
+    name_of_creator = 'name_of_creator'
+    is_updated = 'is_updated'
+    stock_updated = 'stock_updated'
+    stock_id = 'stock_id'
+    stock_name = 'stock_name'
+    stock = 'stock'
+    activity_id = 'activity_id'
+    activity = 'activity'
+    id_of_creator = 'id_of_creator'
+    users = 'users'
+

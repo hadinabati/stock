@@ -21,7 +21,9 @@ class Create(Model):
     has_response: Optional[bool]
     stock_number: Optional[int]
     info: Optional[list]
+
     count :Optional[int]
+
 
 
 class Update(Model):
