@@ -257,6 +257,12 @@ async def lists():
 
 @router.get('/list_single', response_model=model.Lists)
 async def single_list(text: str):
+    number = -1
+    try:
+        number = int(text)
+    except:
+        pass
+
     pipeline = [
         {
             u"$lookup": {
@@ -291,9 +297,7 @@ async def single_list(text: str):
                         }
                     },
                     {
-                        u"count": {
-                            "$regex": text
-                        }
+                        u"stock_number": int(number)
                     },
                     {
                         u"position_name.0.name": {
