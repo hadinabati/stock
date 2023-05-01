@@ -6,7 +6,8 @@ import RolePage from "pages/RolePage.vue";
 import RoleListPage from "pages/RoleListPage.vue";
 import Stock from "pages/Stock.vue";
 import ProductPage from "pages/ProductPage.vue";
-import RepairCreatePage from "pages/RepairCreatePage.vue";
+import ActivityCreatePage from "pages/ActivityCreatePage.vue";
+import ActivityListPage from "pages/ActivityListPage.vue";
 
 const routes = [
   {
@@ -22,7 +23,9 @@ const routes = [
       {path: '/role_list' , component:RoleListPage},
       {path: '/stock' , component:Stock},
       {path: "/products" , component:ProductPage},
-      {path: "/repair_create" , component:RepairCreatePage}
+      {path: "/activity_create" , component:ActivityCreatePage},
+      {path: '/activity_list' , component : ActivityListPage}
+
     ]
   },
 

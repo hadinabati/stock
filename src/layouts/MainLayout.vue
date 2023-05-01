@@ -52,10 +52,10 @@
                 <q-item-section class="sub_headers" @click="this.change_route('Position')">ثبت گردشکار</q-item-section>
               </q-item>
               <q-item clickable v-close-popup>
-                <q-item-section class="sub_headers" @click="this.change_route('repair_create')">ثبت نوع گردشکاری</q-item-section>
+                <q-item-section class="sub_headers" @click="this.change_route('activity_create')">ثبت نوع گردشکاری</q-item-section>
               </q-item>
               <q-item clickable v-close-popup>
-                <q-item-section class="sub_headers" @click="this.change_route('Grade')">لیست نوع گردشکاری</q-item-section>
+                <q-item-section class="sub_headers" @click="this.change_route('activity_list')">لیست نوع گردشکاری</q-item-section>
               </q-item>
             </q-list>
           </q-menu>

@@ -83,6 +83,12 @@ export  default class urls{
   activities_list(){
     return this.main + 'activities/list'
   }
+  activities_delete(){
+    return this.main + 'activities/delete'
+  }
+  activities_active(){
+    return this.main + 'activities/active'
+  }
 
 
 }
