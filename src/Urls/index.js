@@ -76,6 +76,9 @@ export  default class urls{
   stock_list_single(){
     return this.main + 'stock/list_single'
   }
+  stock_list_is_consumere(){
+    return this.main + 'stock/list_is_consumer'
+  }
 
   activities_create(){
     return this.main + 'activities/create'
@@ -88,6 +91,10 @@ export  default class urls{
   }
   activities_active(){
     return this.main + 'activities/active'
+  }
+
+  repair_create(){
+    return this.main + 'repair/create'
   }
 
 

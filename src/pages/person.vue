@@ -451,9 +451,7 @@ export default {
       if (this.data.name !== '' && this.data.family !== ''
         && this.data.national_code !== '' && this.data.grade_id !== ''
         && this.data.position_id !== '') {
-
         const address = new urls()
-        console.log(this.data)
         axios.post(address.person_create(), {
           "name": this.data.name,
           "family": this.data.family,
@@ -472,6 +470,8 @@ export default {
             this.data.role = ''
             this.lists()
           }
+        }).catch(()=>{
+          this.toast('خطای داخلی سرور', 'pink-6', 'white')
         })
 
       } else {

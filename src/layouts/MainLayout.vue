@@ -49,7 +49,10 @@
           <q-menu fit >
             <q-list style="min-width: 100px">
               <q-item clickable v-close-popup>
-                <q-item-section class="sub_headers" @click="this.change_route('Position')">ثبت گردشکار</q-item-section>
+                <q-item-section class="sub_headers" @click="this.change_route('repair')">ثبت گردشکار</q-item-section>
+              </q-item>
+              <q-item clickable v-close-popup>
+                <q-item-section class="sub_headers" @click="this.change_route('repair')">لیست گردش کار های ثبت شده</q-item-section>
               </q-item>
               <q-item clickable v-close-popup>
                 <q-item-section class="sub_headers" @click="this.change_route('activity_create')">ثبت نوع گردشکاری</q-item-section>
@@ -67,19 +70,19 @@
                 <q-item-section class="sub_headers">گزارشات کالا</q-item-section>
               </q-item>
               <q-item clickable v-close-popup>
-                <q-item-section class="sub_headers" @click="this.change_route('Position')">گزارشات افراد</q-item-section>
+                <q-item-section class="sub_headers" @click="this.change_route('')">گزارشات افراد</q-item-section>
               </q-item>
               <q-item clickable v-close-popup>
-                <q-item-section class="sub_headers" @click="this.change_route('person')">گزارشات واحد ها</q-item-section>
+                <q-item-section class="sub_headers" @click="this.change_route('')">گزارشات واحد ها</q-item-section>
               </q-item>
               <q-item clickable v-close-popup>
-                <q-item-section class="sub_headers" @click="this.change_route('Grade')">گزارشات درجات</q-item-section>
+                <q-item-section class="sub_headers" @click="this.change_route('')">گزارشات درجات</q-item-section>
               </q-item>
               <q-item clickable v-close-popup>
-                <q-item-section class="sub_headers"  @click="this.change_route('Category')">گزارشات دسته بندی</q-item-section>
+                <q-item-section class="sub_headers"  @click="this.change_route('')">گزارشات دسته بندی</q-item-section>
               </q-item>
               <q-item clickable v-close-popup>
-                <q-item-section class="sub_headers"  @click="this.change_route('Category')">گزارشات فعالیت های روزانه</q-item-section>
+                <q-item-section class="sub_headers"  @click="this.change_route('')">گزارشات فعالیت های روزانه</q-item-section>
               </q-item>
             </q-list>
           </q-menu>

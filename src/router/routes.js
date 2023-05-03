@@ -8,6 +8,7 @@ import Stock from "pages/Stock.vue";
 import ProductPage from "pages/ProductPage.vue";
 import ActivityCreatePage from "pages/ActivityCreatePage.vue";
 import ActivityListPage from "pages/ActivityListPage.vue";
+import Repair from "pages/Repair.vue";
 
 const routes = [
   {
@@ -24,7 +25,8 @@ const routes = [
       {path: '/stock' , component:Stock},
       {path: "/products" , component:ProductPage},
       {path: "/activity_create" , component:ActivityCreatePage},
-      {path: '/activity_list' , component : ActivityListPage}
+      {path: '/activity_list' , component : ActivityListPage},
+      {path:'/repair' , component:Repair}
 
     ]
   },
