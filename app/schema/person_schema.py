@@ -1,4 +1,5 @@
 from typing import Optional
+from pydantic import Field
 
 from base.so_base import Model, ObjectId
 
@@ -49,4 +50,4 @@ class SimpleResponse(Model):
 class ResponseList(Model):
     Done: Optional[bool]
     data: Optional[list[Lists]]
-    ErrorMassage: Optional[str]
+    ErrorMassage: Optional[str] = Field(default='')

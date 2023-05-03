@@ -250,9 +250,8 @@ async def lists():
 
         response.data = final_list
         response.Done = True
-        response.ErrorMassage = ''
         return response.dict()
-    except Exception:
+    except :
         response.Done = False
         response.data = []
         response.ErrorMassage = 'خطای داخلی سرور'

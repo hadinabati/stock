@@ -32,11 +32,11 @@ class VariablesMongoDb:
     tags = 'tags'
     description = 'description'
     items = 'items'
-
+    accession = 'accession'
     role_name = 'role_name'
     info = "info"
     super_admin = 'super_admin'
-
+    health = 'health'
     properties = 'properties'
     name_of_creator = 'name_of_creator'
     is_updated = 'is_updated'
@@ -48,4 +48,15 @@ class VariablesMongoDb:
     activity = 'activity'
     id_of_creator = 'id_of_creator'
     users = 'users'
+    count = 'count'
+    add = 'add'
+    delete = 'delete'
+    accession_history = 'accession_history'
+    accession_id = 'accession_id'
+    type = 'type'
+    response_name='response_name'
+    use_number='use_number'
+    crash_number='crash_number'
+    un_uses_number='un_uses_number'
+    total_number='total_number'
 

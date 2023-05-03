@@ -11,5 +11,6 @@ route_collection = database['routes']
 roles_collection = database['roles']
 activity_collection = database['activity']
 repair_collection  = database['repair']
+crash_collection  = database['crash']
 
 
