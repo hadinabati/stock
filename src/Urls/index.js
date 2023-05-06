@@ -103,6 +103,18 @@ export  default class urls{
   stock_accession(){
     return this.main + 'stock/accession'
   }
+  stock_accession_remove(){
+    return this.main + 'stock/accession_add_remove'
+  }
+  stock_accession_add_to_stock(){
+    return this.main + 'stock/add_consumer_stock'
+  }
+  stock_add_to_crash(){
+    return this.main + 'stock/crash'
+  }
+  stock_remove_from_crash(){
+    return this.main + 'stock/uncrash'
+  }
 
 
 

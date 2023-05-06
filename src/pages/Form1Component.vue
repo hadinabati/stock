@@ -82,8 +82,9 @@
 
 
               </div>
-              <div v-for="(item , index ) in repair_info.activity_id.properties" :key="index" class="full-width q-mt-lg q-mb-md">
-                <label class="labels">{{item}}</label>
+              <div v-for="(item , index ) in repair_info.activity_id.properties" :key="index"
+                   class="full-width q-mt-lg q-mb-md">
+                <label class="labels">{{ item }}</label>
                 <q-input
                   outlined
                   standout
@@ -110,7 +111,7 @@
 
               <div class="full-width q-mt-lg q-mb-md">
                 <label class="labels">آیا نیاز به بروز رسانی داید ؟ </label>
-                <q-radio checked-icon="task_alt" unchecked-icon="panorama_fish_eye" v-model="repair_info.is_updated"
+                <q-radio disable checked-icon="task_alt" unchecked-icon="panorama_fish_eye" v-model="repair_info.is_updated"
                          name="check" label="بلی" :val="true" class="q-ma-xs inputs" dense>
                 </q-radio>
                 <q-radio checked-icon="task_alt" unchecked-icon="panorama_fish_eye" :val="false"
@@ -170,28 +171,31 @@ export default {
       stock_number: '',
       is_updated: false,
       activity_list: [],
-      activity_id :'',
-      activity_properties:[],
-      description :'',
-      stock_id :''
+      activity_id: '',
+      activity_properties: [],
+      description: '',
+      stock_id: ''
 
     })
 
 
     function Activity_list(category_id) {
+      repair_info.activity_list.splice(0, repair_info.activity_list.length)
       axios.get(address.activities_list() + '/' + category_id).then(
         res => {
           if (res.status === 200) {
-            if (res.data.data.length > 0){
+            if (res.data.data.length > 0) {
               for (const activity of res.data.data) {
-                repair_info.activity_list.push({
-                  name: activity.name,
-                  id: activity.id,
-                  properties :activity.properties
-                })
+                if (activity.active){
+                  repair_info.activity_list.push({
+                    name: activity.name,
+                    id: activity.id,
+                    properties: activity.properties
+                  })
+                }
+
               }
-            }
-            else {
+            } else {
               $q.notify({
                 position: 'bottom',
                 timeout: 1500,
@@ -241,7 +245,7 @@ export default {
       if (this.read_only) {
         this.repair_info.stock_number = this.stock_number
       }
-      if (this.repair_info.stock_number !==''){
+      if (this.repair_info.stock_number !== '') {
         axios.get(this.address.stock_list_is_consumere(), {
           params: {
             text: this.repair_info.stock_number,
@@ -273,39 +277,40 @@ export default {
         }).catch(() => {
           this.toast('خطای داخلی سرور', 'pink-6', 'white')
         })
-      }
-      else {
+      } else {
         this.toast('لطفا شماره اموال را وارد نمایید', 'pink-6', 'white')
       }
 
     },
-    save(){
-        if (this.repair_info.is_updated){
-          alert('need updated')
-        }
-        else {
-          axios.post(this.address.repair_create() , {
-            "id_of_creator": '6432fde4de420c8131e423e2',
-            "activity_id": this.repair_info.activity_id.id,
-            "description": this.repair_info.description,
-            "stock_updated": false,
-            "properties":this.repair_info.activity_properties,
-            "stock_id": this.repair_info.stock_id
-          }).then(
-            res =>{
-              if (res.data.Done){
-                this.repair_info.stock_number = ''
-                this.repair_info.searched = false
-                this.toast(res.data.Message , 'green-9' , 'white')
-              }
-              else {
-                this.toast(res.data.Message , 'pink-6' , 'white')
-              }
+    save() {
+      if (this.repair_info.is_updated) {
+        alert('need updated')
+      } else {
+        axios.post(this.address.repair_create(), {
+          "id_of_creator": '6432fde4de420c8131e423e2',
+          "activity_id": this.repair_info.activity_id.id,
+          "description": this.repair_info.description,
+          "stock_updated": false,
+          "properties": this.repair_info.activity_properties,
+          "stock_id": this.repair_info.stock_id
+        }).then(
+          res => {
+            if (res.data.Done) {
+              this.repair_info.activity_id = ''
+              this.repair_info.description = ''
+              this.repair_info.activity_properties = []
+              this.repair_info.stock_id = ''
+              this.repair_info.stock_number = ''
+              this.repair_info.searched = false
+              this.toast(res.data.Message, 'green-9', 'white')
+            } else {
+              this.toast(res.data.Message, 'pink-6', 'white')
             }
-          ).catch(()=>{
-            this.toast('خطای داخلی سرور' , 'pink-6' , 'white')
-          })
-        }
+          }
+        ).catch(() => {
+          this.toast('خطای داخلی سرور', 'pink-6', 'white')
+        })
+      }
     }
   }
 }
