@@ -54,9 +54,9 @@ class VariablesMongoDb:
     accession_history = 'accession_history'
     accession_id = 'accession_id'
     type = 'type'
-    response_name='response_name'
-    use_number='use_number'
-    crash_number='crash_number'
-    un_uses_number='un_uses_number'
-    total_number='total_number'
-
+    response_name = 'response_name'
+    use_number = 'use_number'
+    crash_number = 'crash_number'
+    un_uses_number = 'un_uses_number'
+    total_number = 'total_number'
+    serial = "serial"

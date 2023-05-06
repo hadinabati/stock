@@ -121,11 +121,12 @@ class AddOrDeleteAccession(Model):
 
 class ConsumerListItem(Model):
     id :Optional[ObjectId]
+    active : Optional[bool]
     name :Optional[str]
+    serial :Optional[int]
     stock_number :Optional[int]
     use_number: Optional[int]
     crash_number: Optional[int]
-    un_uses_number: Optional[int]
     total_number: Optional[int]
 
 

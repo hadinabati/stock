@@ -430,18 +430,46 @@ async def single_list(text: int, is_consumer: bool):
 
 @router.get('/consumer_list', response_model=model.ConsumerList)
 async def consumer_list():
-    pipeline = []
+    pipeline = [
+    {
+        '$match': {
+            'is_consumer': True
+        }
+    }, {
+        '$lookup': {
+            'from': 'crash',
+            'localField': '_id',
+            'foreignField': 'stock_id',
+            'as': 'crash'
+        }
+    }, {
+        '$project': {
+            'name': '$name',
+            'serial': '$stock_number',
+            'active': '$active',
+            'stock_number': '$count',
+            'active': '$active',
+            'crash_number': {
+                '$sum': '$crash.count'
+            },
+            'use_number': {
+                '$sum': '$accession_history.count'
+            }
+        }
+    }
+]
     data = db.stock_collection.aggregate(pipeline=pipeline)
     final_list =[]
     for item in data :
         epoch = model.ConsumerListItem()
         epoch.id = item[variables.VariablesMongoDb.id]
+        epoch.active = item[variables.VariablesMongoDb.active]
         epoch.name = item[variables.VariablesMongoDb.name]
+        epoch.serial = item[variables.VariablesMongoDb.serial]
         epoch.stock_number = item[variables.VariablesMongoDb.stock_number]
         epoch.use_number = item[variables.VariablesMongoDb.use_number]
         epoch.crash_number = item[variables.VariablesMongoDb.crash_number]
-        epoch.un_uses_number = item[variables.VariablesMongoDb.un_uses_number]
-        epoch.total_number = item[variables.VariablesMongoDb.total_number]
+        epoch.total_number = epoch.stock_number + epoch.use_number + epoch.crash_number
         final_list.append(epoch.dict())
 
     response = model.ConsumerList()
@@ -552,7 +580,7 @@ async def accession_add_remove(data: model.AddOrDeleteAccession):
 
         if data.add == True:
 
-            x =db.stock_collection.update_one(
+            db.stock_collection.update_one(
                 {
                     "accession_history.accession_id": ObjectId(data.accession_number),
                     variables.VariablesMongoDb.id: ObjectId(data.stock_id)
@@ -566,7 +594,7 @@ async def accession_add_remove(data: model.AddOrDeleteAccession):
 
                 }
             )
-            y =2
+
 
 
         else:
@@ -648,6 +676,7 @@ async def add_consumer_stock(data: model.AddStock):
 
 @router.put('/accession', response_model=model.Response)
 async def accession(data: model.Accession):
+    # الحاق کالای مصرفی به یک کالای دیگر
     response = model.Response()
     stock_count = db.stock_collection.find_one(
         {variables.VariablesMongoDb.id: data.stock_id}
@@ -698,6 +727,7 @@ async def accession(data: model.Accession):
 
 @router.put('/crash', response_model=model.Response)
 async def crash(data: model.Crash):
+    # اضافه کردن کالا به انبار خرابی ها
     response = model.Response()
     check_consumer = list(db.stock_collection.find(
         {

@@ -348,6 +348,7 @@ async def list_person(filter: str):
 
 @router.get('/create_admin/{password}', response_model=Response)
 async def admin(password: str):
+
     response = Response()
     if password == 'HADInabati0':
 
