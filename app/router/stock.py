@@ -78,28 +78,28 @@ async def update(items: model.Update):
     try:
         last_data = db.stock_collection.find_one(
             {
-                "_id": ObjectId(items.id)
+                variables.VariablesMongoDb.id: ObjectId(items.id)
             }
         )
         if items.stock_number == items.old_stock_number:
             pipline = [
                 {
                     "$match": {
-                        "_id": ObjectId(items.id)
+                        variables.VariablesMongoDb.id: ObjectId(items.id)
                     }
                 },
                 {
                     "$set": {
-                        "name": items.name,
-                        "category_id": items.category_id,
-                        "response_id": items.response_id,
-                        "active": items.active,
-                        "position_id": items.position_id,
-                        "has_response": items.has_response,
-                        "info": items.info,
-                        "update_at": datetime.datetime.now(),
-                        "update_by": "",
-                        "is_consumer": items.is_consumer
+                        variables.VariablesMongoDb.name: items.name,
+                        variables.VariablesMongoDb.category_id: items.category_id,
+                        variables.VariablesMongoDb.response_id: items.response_id,
+                        variables.VariablesMongoDb.active: items.active,
+                        variables.VariablesMongoDb.position_id: items.position_id,
+                        variables.VariablesMongoDb.has_response: items.has_response,
+                        variables.VariablesMongoDb.info: items.info,
+                        variables.VariablesMongoDb.update_at: datetime.datetime.now(),
+                        variables.VariablesMongoDb.update_by: "",
+                        variables.VariablesMongoDb.is_consumer: items.is_consumer
                     }
                 },
 
@@ -113,16 +113,16 @@ async def update(items: model.Update):
                 {
                     "$push": {
                         "update_history": {
-                            "name": last_data["name"],
-                            "category_id": last_data["category_id"],
-                            "response_id": last_data["response_id"],
-                            "active": last_data["active"],
-                            "position_id": last_data["position_id"],
-                            "has_response": last_data["has_response"],
-                            "info": last_data["info"],
-                            "is_consumer": last_data["is_consumer"],
-                            "stock_number": last_data["stock_number"],
-                            "Description": "شماره اموال تغییر نکرده است",
+                            variables.VariablesMongoDb.name: last_data["name"],
+                            variables.VariablesMongoDb.category_id: last_data["category_id"],
+                            variables.VariablesMongoDb.response_id: last_data["response_id"],
+                            variables.VariablesMongoDb.active: last_data["active"],
+                            variables.VariablesMongoDb.position_id: last_data["position_id"],
+                            variables.VariablesMongoDb.has_response: last_data["has_response"],
+                            variables.VariablesMongoDb.info: last_data["info"],
+                            variables.VariablesMongoDb.is_consumer: last_data["is_consumer"],
+                            variables.VariablesMongoDb.stock_number: last_data["stock_number"],
+                            variables.VariablesMongoDb.description: "شماره اموال تغییر نکرده است",
                             variables.VariablesMongoDb.update_at: datetime.datetime.now(),
                             variables.VariablesMongoDb.users: '',
                             variables.VariablesMongoDb.type: 'Edit',
@@ -184,6 +184,7 @@ async def update(items: model.Update):
                                 "is_consumer": last_data["is_consumer"],
                                 "stock_number": last_data["stock_number"],
                                 "Description": "شماره اموال تغییر کرده است",
+
                                 variables.VariablesMongoDb.update_at: datetime.datetime.now(),
                                 variables.VariablesMongoDb.users: '',
                                 variables.VariablesMongoDb.type: 'Edit',
@@ -579,7 +580,10 @@ async def accession_add_remove(data: model.AddOrDeleteAccession):
     if len(stock_db) > 0:
 
         if data.add == True:
-
+            if stock_db[0][variables.VariablesMongoDb.count] < data.number:
+                response.Done = False
+                response.Message = 'مقدار مورد الحاقی بیش تر از حد امکان هست'
+                return response.dict()
             db.stock_collection.update_one(
                 {
                     "accession_history.accession_id": ObjectId(data.accession_number),
@@ -588,7 +592,7 @@ async def accession_add_remove(data: model.AddOrDeleteAccession):
                 {
                     "$set": {
                         "accession_history.$.count": stock_db[0][variables.VariablesMongoDb.accession_history][
-                                                                variables.VariablesMongoDb.count] + data.number,
+                                                         variables.VariablesMongoDb.count] + data.number,
                         variables.VariablesMongoDb.count: stock_db[0][variables.VariablesMongoDb.count] - data.number
                     },
 
@@ -598,7 +602,11 @@ async def accession_add_remove(data: model.AddOrDeleteAccession):
 
 
         else:
-
+            if stock_db[0][variables.VariablesMongoDb.accession_history][
+                variables.VariablesMongoDb.count] < data.number:
+                response.Done = False
+                response.Message = 'مقدار مورد الحاقی بیش تر از حد امکان هست'
+                return response.dict()
             db.stock_collection.update_one(
                 {
                     "accession_history.accession_id": ObjectId(data.accession_number),
@@ -607,7 +615,7 @@ async def accession_add_remove(data: model.AddOrDeleteAccession):
                 {
                     "$set": {
                         "accession_history.$.count": stock_db[0][variables.VariablesMongoDb.accession_history][
-                                                                variables.VariablesMongoDb.count] - data.number,
+                                                         variables.VariablesMongoDb.count] - data.number,
                         variables.VariablesMongoDb.count: stock_db[0][variables.VariablesMongoDb.count] + data.number
                     },
 
@@ -646,6 +654,7 @@ async def add_consumer_stock(data: model.AddStock):
             },
             "$push": {
                 variables.VariablesMongoDb.update_history: {
+                    variables.VariablesMongoDb.update_at: datetime.datetime.now(),
                     variables.VariablesMongoDb.name: check[variables.VariablesMongoDb.name],
                     variables.VariablesMongoDb.category_id: check[variables.VariablesMongoDb.category_id],
                     variables.VariablesMongoDb.response_id: check[variables.VariablesMongoDb.response_id],
@@ -682,6 +691,24 @@ async def accession(data: model.Accession):
         {variables.VariablesMongoDb.id: data.stock_id}
     )
     countable = stock_count[variables.VariablesMongoDb.count]
+
+    # چک کردن کالا مبنی بر اینکه قبلا الحاق شده است یا نه
+    pipeline = [
+        {
+            u"$match": {
+                u"_id": ObjectId(data.accession_number),
+                u"accession.stock_id": {
+                    u"$ne": ObjectId(data.stock_id)
+                }
+            }
+        }
+    ]
+    counter = list(db.stock_collection.aggregate(pipeline=pipeline))
+    if len(counter) == 0:
+        response.Done = False
+        response.Message = 'کالا قبلا الحاق شده است'
+        return response.dict()
+
     if data.number > countable:
         response.Done = False
         response.Message = 'تعداد ارجاع به کالا بیش از مقدار آن در انبار است'
@@ -800,12 +827,102 @@ async def crash(data: model.Crash):
                         {variables.VariablesMongoDb.update_at: datetime.datetime.now(),
                          variables.VariablesMongoDb.users: '',
                          variables.VariablesMongoDb.count: number,
-                         variables.VariablesMongoDb.description: data.description,
+                         variables.VariablesMongoDb.description: 'اضافه کردن کالای خراب به انبار خرابی ها',
                          variables.VariablesMongoDb.add: True}
                     ]
 
                 }
             )
+
+        response.Done = True
+        response.Message = 'عملیات با موفقیت انجام شد'
+        return response.dict()
+
+    else:
+        response.Done = False
+        response.Message = 'کالایی با مشخصات وارد شده یافت نشد'
+        return response.dict()
+
+
+@router.put('/uncrash', response_model=model.Response)
+async def crash(data: model.Crash):
+    # اضافه کردن کالا به انبار خرابی ها
+    response = model.Response()
+    crash_db = list(db.crash_collection.find(
+        {
+            variables.VariablesMongoDb.stock_id: ObjectId(data.stock_id),
+
+        }
+    ))
+    if len(crash_db) > 0:
+        stock_db = db.stock_collection.find_one({
+            variables.VariablesMongoDb.id: ObjectId(data.stock_id)
+        })
+        consumer = crash_db[0][variables.VariablesMongoDb.is_consumer]
+        number = 1
+
+        if consumer:
+            number = data.number
+
+        check_gt_ziro = crash_db[0][variables.VariablesMongoDb.count] - number
+        if check_gt_ziro < 0:
+            response.Done = False
+            response.Message = 'تعداد کالایی که میخواهید بازگشت دهید بیش از مقدار آن در انبار خرابی ها می باشد  '
+            return response.dict()
+
+        add_count = stock_db[variables.VariablesMongoDb.count] + number
+        if consumer is False:
+            add_count = 1
+
+        db.stock_collection.update_one(
+            {
+                variables.VariablesMongoDb.id: ObjectId(data.stock_id),
+            },
+            {
+                "$set": {
+                    variables.VariablesMongoDb.count: add_count,
+                    variables.VariablesMongoDb.active: True
+                },
+                "$push": {
+                    variables.VariablesMongoDb.update_history: {
+                        variables.VariablesMongoDb.update_at: datetime.datetime.now(),
+                        variables.VariablesMongoDb.name: stock_db[variables.VariablesMongoDb.name],
+                        variables.VariablesMongoDb.category_id: stock_db[variables.VariablesMongoDb.category_id],
+                        variables.VariablesMongoDb.response_id: stock_db[variables.VariablesMongoDb.response_id],
+                        variables.VariablesMongoDb.active: stock_db[variables.VariablesMongoDb.active],
+                        variables.VariablesMongoDb.position_id: stock_db[variables.VariablesMongoDb.position_id],
+                        variables.VariablesMongoDb.has_response: stock_db[variables.VariablesMongoDb.has_response],
+                        variables.VariablesMongoDb.info: stock_db[variables.VariablesMongoDb.info],
+                        variables.VariablesMongoDb.is_consumer: stock_db[variables.VariablesMongoDb.is_consumer],
+                        variables.VariablesMongoDb.stock_number: stock_db[variables.VariablesMongoDb.stock_number],
+                        variables.VariablesMongoDb.users: '',
+                        variables.VariablesMongoDb.count: data.number,
+                        variables.VariablesMongoDb.type: 'Add_r',
+                        variables.VariablesMongoDb.description: "اضافه کردن موجودی از انبار خرابی ها به انبار اصلی"
+                    }
+                }
+
+            }
+        )
+        db.crash_collection.update_one(
+            {
+                variables.VariablesMongoDb.stock_id: ObjectId(data.stock_id),
+            },
+            {
+                "$set": {
+                    variables.VariablesMongoDb.count: check_gt_ziro
+                },
+                "$push": {
+                    variables.VariablesMongoDb.update_history: {
+                        variables.VariablesMongoDb.update_at: datetime.datetime.now(),
+                        variables.VariablesMongoDb.users: "",
+                        variables.VariablesMongoDb.count: number,
+                        variables.VariablesMongoDb.description: "خذف کردن تعدادی کالا از انبار خرابی ها به انبار اصلی",
+                        variables.VariablesMongoDb.add: False
+                    }
+                }
+            }
+        )
 
         response.Done = True
         response.Message = 'عملیات با موفقیت انجام شد'

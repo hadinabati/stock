@@ -104,7 +104,7 @@ class Accession(Model):
 class Crash(Model):
     stock_id: Optional[ObjectId]
     number: Optional[int]
-    description: Optional[str]
+
 
 
 class AddStock(Model):
