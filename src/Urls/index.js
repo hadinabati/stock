@@ -97,5 +97,13 @@ export  default class urls{
     return this.main + 'repair/create'
   }
 
+  Stock_consumer_list(){
+    return this.main + 'stock/consumer_list'
+  }
+  stock_accession(){
+    return this.main + 'stock/accession'
+  }
+
+
 
 }
