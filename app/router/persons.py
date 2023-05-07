@@ -201,9 +201,17 @@ async def lists():
         pipeline = [
             {
                 "$match": {
-                    u"name": {
-                        u"$ne": u"super_admin"
+                    "name": {
+                        "$ne": "super_admin"
                     }
+                }
+            },
+            {
+                u"$lookup": {
+                    u"from": u"roles",
+                    u"localField": u"role",
+                    u"foreignField": u"_id",
+                    u"as": u"role_name"
                 }
             },
             {
@@ -237,13 +245,13 @@ async def lists():
             epoch.position_id = items[variables.VariablesMongoDb.position_id]
             epoch.position_name = items[variables.VariablesMongoDb.position_name][0][variables.VariablesMongoDb.name]
             epoch.update_history = items[variables.VariablesMongoDb.update_history]
+            epoch.role_name = items[variables.VariablesMongoDb.role_name][0][variables.VariablesMongoDb.name]
             final_list.append(epoch.dict())
 
         response.data = final_list
         response.Done = True
-        response.ErrorMassage = ''
         return response.dict()
-    except Exception:
+    except :
         response.Done = False
         response.data = []
         response.ErrorMassage = 'خطای داخلی سرور'
@@ -340,6 +348,7 @@ async def list_person(filter: str):
 
 @router.get('/create_admin/{password}', response_model=Response)
 async def admin(password: str):
+
     response = Response()
     if password == 'HADInabati0':
 

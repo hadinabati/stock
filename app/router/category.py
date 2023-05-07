@@ -1,10 +1,13 @@
 # from schema.user_schema import user_show
 # from base import checking
 import datetime
-from fastapi import APIRouter
-from database import mongodb as db
-from schema import category_schema as model
+
 from bson import ObjectId
+from fastapi import APIRouter
+
+from database import mongodb as db
+from instances import Mongo as variables
+from schema import category_schema as model
 
 # from base.depency import basic_authenticate, Token, create_access_token, permissions
 
@@ -19,7 +22,7 @@ router = APIRouter()
 @router.post('/create', response_model=model.Response)
 async def create(item: model.Create):
     data = item.dict()
-    data['Create_at'] = datetime.datetime.now()
+    data[variables.VariablesMongoDb.create_at] = datetime.datetime.now()
     response = model.Response()
     res = db.category_collection.insert_one(data).acknowledged
     if res:
@@ -37,11 +40,11 @@ async def update(item: model.Items):
     response = model.Response()
     try:
         count = db.category_collection.update_one({'_id': ObjectId(item.id)}, {
-            '$set': {'name': item.name,
-                     'info':item.info,
-                     'description': item.description,
-                     'updated_at': datetime.datetime.now(),
-                     'updated_by': ''}
+            '$set': {variables.VariablesMongoDb.name: item.name,
+                     variables.VariablesMongoDb.info: item.info,
+                     variables.VariablesMongoDb.description: item.description,
+                     variables.VariablesMongoDb.update_at: datetime.datetime.now(),
+                     variables.VariablesMongoDb.update_by: ''}
         }).matched_count
         if count > 0:
             response.Done = True
@@ -64,10 +67,29 @@ async def lists():
     final_list = []
     for item in all_data:
         epoch = model.Items()
-        epoch.info = item['info']
-        epoch.id = item['_id']
-        epoch.name = item['name']
-        epoch.description = item['description']
+        epoch.info = item[variables.VariablesMongoDb.info]
+        epoch.id = item[variables.VariablesMongoDb.id]
+        epoch.name = item[variables.VariablesMongoDb.name]
+        epoch.description = item[variables.VariablesMongoDb.description]
+        final_list.append(epoch.dict())
+    response.item = final_list
+    #
+    return response.dict()
+
+
+@router.get('/list/{id}', response_model=model.Lists)
+async def list_item(id: str):
+    all_data = list(db.category_collection.find(
+        {variables.VariablesMongoDb.id: ObjectId(id)}
+    ))
+    response = model.Lists()
+    final_list = []
+    for item in all_data:
+        epoch = model.Items()
+        epoch.info = item[variables.VariablesMongoDb.info]
+        epoch.id = item[variables.VariablesMongoDb.id]
+        epoch.name = item[variables.VariablesMongoDb.name]
+        epoch.description = item[variables.VariablesMongoDb.description]
         final_list.append(epoch.dict())
     response.item = final_list
     #
