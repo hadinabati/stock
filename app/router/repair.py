@@ -112,6 +112,56 @@ async def all_list():
     return response.dict()
 
 
+@router.get('/list/stock/{id}', response_model=model.ListItem)
+async def stock_repair_list(id: str):
+    pipeline = [
+        {
+            u"$match": {
+                u"stock_id": ObjectId(id)
+            }
+        },
+        {
+            u"$unwind": {
+                u"path": u"$update_history"
+            }
+        },
+        {
+            u"$lookup": {
+                u"from": u"activity",
+                u"localField": u"update_history.activity_id",
+                u"foreignField": u"_id",
+                u"as": u"activity"
+            }
+        },
+        {
+            u"$unwind": {
+                u"path": u"$activity"
+            }
+        },
+        {
+            u"$project": {
+                u"name": u"$activity.name",
+                u"update_history": u"$update_history",
+                u"properties": u"$activity.properties",
+                "update_at": "$update_at"
+            }
+        }
+    ]
+    data =list( db.repair_collection.aggregate(pipeline=pipeline))
+    final_list = []
+    for item in data:
+        epoch = model.RepairListItem()
+        epoch.name = item[variable.VariablesMongoDb.name]
+        epoch.update_history = item[variable.VariablesMongoDb.update_history]
+        epoch.activity_properties = item[variable.VariablesMongoDb.properties]
+        epoch.update_at = item[variable.VariablesMongoDb.update_at]
+        final_list.append(epoch.dict())
+
+    response = model.ListItem()
+    response.data = final_list
+    return response.dict()
+
+
 @router.get('/list/{person_id}', response_model=model.ListItem)
 async def person_list(person_id: str):
     pipeline = [
@@ -192,7 +242,7 @@ async def update(item: model.Update):
             },
             {
                 "$set": {
-                    variable.VariablesMongoDb.is_updated : True,
+                    variable.VariablesMongoDb.is_updated: True,
                     variable.VariablesMongoDb.description: item.description,
                     variable.VariablesMongoDb.properties: item.properties,
                     variable.VariablesMongoDb.activity_id: item.activity_id,
@@ -213,11 +263,11 @@ async def update(item: model.Update):
                 }
             }
         )
-    if res1.matched_count + res2.matched_count > 1 :
+    if res1.matched_count + res2.matched_count > 1:
         response.Done = True
-        response.Message='تغییرات با موفقیت انجام شد'
+        response.Message = 'تغییرات با موفقیت انجام شد'
     else:
         response.Done = True
-        response.Message='تغییرات با موفقیت انجام شد'
+        response.Message = 'تغییرات با موفقیت انجام شد'
 
     return response.dict()
