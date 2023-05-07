@@ -116,6 +116,10 @@ export  default class urls{
     return this.main + 'stock/uncrash'
   }
 
+  stock_repair_id(){
+    return this.main  + 'repair/list/stock'
+  }
+
 
 
 }

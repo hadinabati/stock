@@ -18,7 +18,7 @@
       virtual-scroll
       flat bordered dense
       class="my-sticky-column-table text"
-      title="Treats"
+      title="کالاهای ثبت شده"
       :rows="searched ? searched_list : data_list"
       :columns="columns"
       row-key="id"
@@ -57,15 +57,11 @@
             <div class="text-left">
               <div class="row">
                 <div class="col-md-2 q-pa-xs ">
-                  <q-btn label="تاریخچه تعمیرات" class="full-width q-ma-md" dense color="indigo-10"
+                  <q-btn @click="repair_btn_list(props.key)" label="تاریخچه تعمیرات" class="full-width q-ma-md" dense color="indigo-10"
                          text-color="white"></q-btn>
                 </div>
                 <div class="col-md-2 q-pa-xs ">
-                  <q-btn label="ثبت گزارش تعمیرات" class="full-width q-ma-md" dense color="light-blue-9"
-                         text-color="white"></q-btn>
-                </div>
-                <div class="col-md-2 q-pa-xs ">
-                  <q-btn label="بروز رسانی" class="full-width q-ma-md" dense color="lime-10" text-color="dark"></q-btn>
+                  <q-btn disable label="بروز رسانی" class="full-width q-ma-md" dense color="lime-10" text-color="dark"></q-btn>
                 </div>
                 <div class="col-md-2 q-pa-xs ">
                   <q-btn label=" لیست بروز رسانی ها" class="full-width q-ma-md" dense color="teal-9 "
@@ -82,6 +78,73 @@
 
     </q-table>
   </div>
+
+
+  <q-dialog  v-model="dialogs.repair_list_dialog" style="direction: rtl">
+    <q-card>
+      <q-card-section>
+        <div class="text-h6 headers">تاریخچه تعمیرات </div>
+      </q-card-section>
+
+      <q-card-section class="q-pt-none">
+
+        <div class="row text" v-for="(item , index) in repair_history" :key="index">
+          <div class="col-2">
+            {{index + 1}}
+          </div>
+          <div class="col-10">
+            <div class="row">
+              <div class="col-12">
+                <label class="text">نام:
+                  <span class="q-mr-md q-ml-md">
+                {{item.name}}
+              </span>
+
+                </label>
+              </div>
+              <div class="col-12">
+                <label class="text">توضیحات:
+                  <span class="q-mr-md q-ml-md">
+                  {{item.update_history.description}}
+              </span>
+
+                </label>
+              </div>
+              <div class="col-12">
+                <label class="text">تاریخ تعویض:
+                  <span class="q-mr-md q-ml-md">
+                  {{item.update_at}}
+              </span>
+
+                </label>
+              </div>
+              <div  class="col-12">
+                <div v-for="(sub , sub_index) in item.update_history.properties" :key="sub_index">
+                  {{sub}} : {{item.activity_properties[sub_index]}}
+
+                </div>
+              </div>
+              <div class="col-12">
+                <hr>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+
+
+      </q-card-section>
+
+      <q-card-actions align="right">
+        <q-btn flat label="OK" color="primary" v-close-popup />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
+
+
+
+
 </template>
 
 <script>
@@ -149,6 +212,22 @@ export default {
     })
     const search_text = ref('')
     const $q = useQuasar()
+
+    const   repair_history = reactive([
+      {
+        name : '',
+        update_history :{
+          description :'',
+          properties:'',
+          activity_id:''
+        },
+        activity_properties:[],
+        update_at :''
+
+      }
+    ])
+
+
 
     function Message(text, color, textColor) {
       const toast = $q.notify({
@@ -226,6 +305,7 @@ export default {
     Loading_data()
 
     return {
+      repair_history,
       search_text,
       Message,
       columns,
@@ -301,6 +381,37 @@ export default {
         this.searched = false
       }
 
+    } ,
+
+    repair_btn_list(id){
+      const  address= new urls()
+      axios.get(address.stock_repair_id() +'/' + id).then(res =>{
+        if (res.status ===200){
+          if (res.data.data.length>0){
+            this.repair_history.splice( 0 , this.repair_history.length)
+            for (const item of res.data.data) {
+              const day = new Date(item.update_at.toString());
+                  this.repair_history.push({
+                    name : item.name,
+                    update_history :item.update_history,
+                    activity_properties:item.activity_properties,
+                    update_at : new persianDate(day).format('LLLL')
+                  })
+
+              this.dialogs.repair_list_dialog = true
+            }
+
+          }
+          else {
+            this.Message(" اطلاعاتی برای این کالا در تعمیرات به ثبت نرسیده است","amber-10","white")
+          }
+        }
+        else {
+          this.Message("خطا در دریافت اطلاعات ","pink-6","white")
+        }
+      }).catch(()=>{
+        this.Message("خطای داخلی سرور","pink-6","white")
+      })
     }
   }
 }
