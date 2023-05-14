@@ -80,6 +80,10 @@ export  default class urls{
     return this.main + 'stock/list_is_consumer'
   }
 
+  stock_update(){
+    return this.main + 'stock/update'
+  }
+
   activities_create(){
     return this.main + 'activities/create'
   }

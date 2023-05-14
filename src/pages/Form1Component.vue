@@ -82,7 +82,7 @@
 
 
               </div>
-              <div v-for="(item , index ) in repair_info.activity_id.properties" :key="index"
+              <div  v-for="(item , index ) in repair_info.activity_id.properties" :key="index"
                    class="full-width q-mt-lg q-mb-md">
                 <label class="labels">{{ item }}</label>
                 <q-input
@@ -148,6 +148,7 @@ export default {
   components: {
     UpdateStockComponent
   },
+
   props: {
     stock_number: Int16Array,
     read_only: Boolean
@@ -286,6 +287,7 @@ export default {
       if (this.repair_info.is_updated) {
         alert('need updated')
       } else {
+
         axios.post(this.address.repair_create(), {
           "id_of_creator": '6432fde4de420c8131e423e2',
           "activity_id": this.repair_info.activity_id.id,
@@ -311,7 +313,8 @@ export default {
           this.toast('خطای داخلی سرور', 'pink-6', 'white')
         })
       }
-    }
+    },
+
   }
 }
 </script>

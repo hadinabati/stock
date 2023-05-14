@@ -1,11 +1,11 @@
 <template>
-  <q-layout view="lHh Lpr lFf" style="direction: rtl">
-    <q-header elevated >
-      <q-toolbar>
+  <q-layout view="lHh Lpr lFf"  style="direction: rtl">
+    <q-header elevated bordered  >
+      <q-toolbar style="" >
         <q-btn class="headers" flat dense label="خانه"   @click="this.change_route('/')"></q-btn>
         <q-btn class="headers" flat  dense  label="ثبت " style="width: 8rem">
         <q-menu fit >
-          <q-list style="min-width: 100px">
+          <q-list style="min-width: 100px" dense>
             <q-item clickable v-close-popup>
               <q-item-section @click="this.change_route('stock')" class="sub_headers">ثبت کالا</q-item-section>
             </q-item>
@@ -150,12 +150,12 @@ export default defineComponent({
 <style>
 .headers{
   font-family: Ahang_b;
-  font-size: 13pt;
+  font-size: 10pt;
 
 
 }
 .sub_headers{
   font-family: Ahang_r;
-  font-size: 12pt;
+  font-size: 9pt;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <p class="headers q-pa-md">  ایجاد کالا </p>
+    <p class="headers q-pa-md"> بروز رسانی کالا </p>
     <div class="col-md-12 col-xs-12">
       <div class="col-md-4 q-pa-md">
         <div class="full-width q-mt-lg">
@@ -16,16 +16,6 @@
                    class="inputs" square rounded label-color="black" color="green-9" outlined dense></q-input>
         </div>
       </div>
-      <div class="col-md-4 q-pa-md">
-        <div class="full-width q-mt-lg">
-          <label class="labels">مصرفی </label>
-          <q-select :options="kind" v-model="stock_data.is_consumer" option-value="id" option-label="label" dense
-                    color="green-9" outlined
-                    square class="inputs" input-style="text-align: center ;">
-          </q-select>
-        </div>
-      </div>
-
 
 
     </div>
@@ -90,13 +80,9 @@
       <div class="col-md-4 q-pa-md">
         <div class="full-width q-mt-lg">
           <label class="labels">دسته بندی </label>
-          <q-select :options="lists.category_list" option-value="id" option-label="name"
-                    v-model="stock_data.category_id" dense color="green-9" outlined
-                    square class="inputs" input-style="text-align: center ;">
-          </q-select>
         </div>
         <div class="row">
-          <template v-for="(item , index) in stock_data.category_id.info" :key="index">
+          <template v-for="(item , index) in properties" :key="index">
             <div class="col-md-6 q-pa-md">
               <q-input readonly input-style="text-align: center"
                        class="inputs" square rounded label-color="black" color="green-9" :model-value="item" outlined
@@ -110,7 +96,7 @@
         </div>
       </div>
       <div class="col-md-4 q-pa-md">
-        <template v-if="stock_data.is_consumer.id">
+        <template v-if="is_consumer">
           <div class="full-width q-mt-lg">
             <label class="labels">تعداد واحد </label>
             <q-input v-model="stock_data.count" type="number" input-style="text-align: center"
@@ -120,12 +106,16 @@
         <template v-else>
           <div class="full-width q-mt-lg">
             <label class="labels">تعداد واحد </label>
-            <q-input readonly  type="text" input-style="text-align: center"
+            <q-input readonly type="text" input-style="text-align: center"
                      class="inputs" square rounded label-color="black" color="green-9" outlined dense
                      model-value="یک واحد"></q-input>
           </div>
         </template>
       </div>
+    </div>
+    <div class="col-md-1"></div>
+    <div class="col-md-10  col-xs-12">
+      <q-btn label="ثبت نهایی" color="indigo-10" class="full-width" @click="save"></q-btn>
     </div>
   </div>
 
@@ -140,9 +130,12 @@ import {useQuasar} from "quasar";
 
 export default {
   name: "UpdateStockComponent",
-  watch() {
-
-
+  props: {
+    properties: [],
+    cat_id: '',
+    id: '',
+    old_stock_number: '',
+    is_consumer: ''
   },
   data() {
     const stock_data = reactive({
@@ -193,7 +186,6 @@ export default {
     const $q = useQuasar()
 
     function get_data() {
-
       axios.get(address.person_list()).then(res => {
         if (res.data.Done) {
           lists.person_list.splice(0, lists.person_list.length)
@@ -207,7 +199,6 @@ export default {
         }
 
       })
-
       axios.get(address.position_list()).then(res => {
         if (res.status === 200) {
           lists.position_list.splice(0, lists.position_list.length)
@@ -222,49 +213,7 @@ export default {
 
         }
       })
-
-      axios.get(address.Category_list()).then(res => {
-        if (res.status === 200) {
-          lists.category_list.splice(0, lists.category_list.length)
-          for (let i = 0; i < res.data.item.length; i++) {
-            lists.category_list.push({
-              "info": res.data.item[i].info,
-              "name": res.data.item[i].name,
-              "description": res.data.item[i].description,
-              "id": res.data.item[i].id
-            })
-
-          }
-          $q.notify({
-            position: 'bottom',
-            timeout: 1500,
-            message: 'بروز رسانی با موفقیت انجام شد',
-            color: 'green-9',
-            textColor: 'white',
-            classes: 'notify_center',
-          })
-        } else {
-          $q.notify({
-            position: 'bottom',
-            timeout: 1500,
-            message: 'خطا در دریافت اطلاعات',
-            color: 'red',
-            textColor: 'white',
-            classes: 'notify_center',
-          })
-        }
-      }).catch(() => {
-        $q.notify({
-          position: 'bottom',
-          timeout: 1500,
-          message: 'خطای داخلی سرور',
-          color: 'red',
-          textColor: 'white',
-          classes: 'notify_center',
-        })
-      })
     }
-
 
     get_data()
 
@@ -299,19 +248,24 @@ export default {
         this.stock_data.has_response_id = false
       }
     },
-
     save() {
-      const address = new urls()
+      const info = []
+      for (const info_item of this.stock_data.category_info_filled) {
+        info.push(info_item)
+      }
       const stock_info = {
+        id: this.id,
         name: this.stock_data.name,
-        is_consumer: this.stock_data.is_consumer.id,
+        is_consumer: this.is_consumer,
         has_response: true,
-        category_id: this.stock_data.category_id.id,
+        category_id: this.cat_id,
         response_id: this.stock_data.response_id.id,
         position_id: this.stock_data.position_id.id,
         stock_number: parseInt(this.stock_data.stock_number),
-        info: this.stock_data.category_info_filled,
-        count: this.stock_data.count
+        info: info,
+        count: this.stock_data.count,
+        old_stock: this.old_stock_number,
+        active: true
       }
       if (this.stock_data.position_id.id === undefined) {
         stock_info.position_id = ''
@@ -320,29 +274,11 @@ export default {
         stock_info.response_id = ''
         stock_info.has_response = false
       }
-      axios.post(address.stock_create(), stock_info).then(res => {
-        if (res.data.Done) {
-          this.stock_data.name=''
-          this.stock_data.searched_name=''
-          this.stock_data.searched_list_name=''
-          this.stock_data.category_info_filled=[]
-          this.stock_data.response_id=''
-          this.stock_data.position_id=''
-          this.stock_data.category_id=''
-          this.stock_data.number=''
-          this.stock_data.stock_number=0
-          this.toast('ثبت کالا با موفقیت انجام شد', 'green-9', 'white')
-        } else {
-          this.toast(res.data.Message, 'pink-6', 'white')
-        }
-      }).catch(() => {
-        this.toast('خطای داخلی سرور', 'pink-6', 'white')
-      })
 
+      this.$emit('child_data_update_stock', stock_info)
 
 
     },
-
     filter_name() {
       if (this.stock_data.filter_name !== '') {
         this.stock_data.searched_name = true
