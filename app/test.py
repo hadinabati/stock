@@ -1,5 +1,5 @@
-from typing import Optional
-from base.so_base import ObjectId, Model
-from pydantic import Field
+import requests
 
+a = requests.get('http://127.0.0.1:8000/openapi.json').json()
+print(a)
 

@@ -115,7 +115,7 @@ async def update(items: model.Update):
                             variables.VariablesMongoDb.info: last_data["info"],
                             variables.VariablesMongoDb.is_consumer: last_data["is_consumer"],
                             variables.VariablesMongoDb.stock_number: last_data["stock_number"],
-                            variables.VariablesMongoDb.description: "شماره اموال تغییر نکرده است",
+                            variables.VariablesMongoDb.description: "بروز رسانی با موفقیت انجام شده است",
                             variables.VariablesMongoDb.update_at: datetime.datetime.now(),
                             variables.VariablesMongoDb.users: '',
                             variables.VariablesMongoDb.type: 'Edit',

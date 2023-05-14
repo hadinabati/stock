@@ -60,3 +60,4 @@ class VariablesMongoDb:
     un_uses_number = 'un_uses_number'
     total_number = 'total_number'
     serial = "serial"
+    site_url = 'http://127.0.0.1:8000/routes/check'

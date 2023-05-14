@@ -9,11 +9,54 @@ from database import mongodb as db
 from instances import Mongo as variables
 from schema import person_schema as model
 from schema.user_schema import Response
+import requests as req
 
 # from base.depency import basic_authenticate, Token, create_access_token, permissions
 
 
 router = APIRouter()
+
+
+def Check():
+    url = variables.VariablesMongoDb.urls + 'openapi.json'
+    data = req.get(url).json()
+    all_key: dict = data['paths']
+    route_address = all_key.keys()
+    for item in route_address:
+        address = item
+    second: dict = all_key[item]
+    methods: dict = second.keys()
+    method_name = list(methods)[0]
+    tag = all_key[item][method_name][variables.VariablesMongoDb.tags][0]
+    summery = all_key[item][method_name][variables.VariablesMongoDb.summary]
+    counter = db.route_collection.count_documents(
+        {
+            variables.VariablesMongoDb.address: address
+        }
+    )
+    if counter > 0:
+        db.route_collection.update_one(
+            {
+                variables.VariablesMongoDb.address: address
+            },
+            {
+                "$set": {
+                    variables.VariablesMongoDb.address: address,
+                    variables.VariablesMongoDb.MethodName: method_name,
+                    variables.VariablesMongoDb.TagName: tag,
+                    variables.VariablesMongoDb.summary: summery,
+
+                }
+            }
+        )
+    else:
+        db.route_collection.insert_one({
+            variables.VariablesMongoDb.address: address,
+            variables.VariablesMongoDb.MethodName: method_name,
+            variables.VariablesMongoDb.TagName: tag,
+            variables.VariablesMongoDb.summary: summery,
+        })
+
 
 
 @router.post('/create', response_model=model.SimpleResponse)
@@ -251,7 +294,7 @@ async def lists():
         response.data = final_list
         response.Done = True
         return response.dict()
-    except :
+    except:
         response.Done = False
         response.data = []
         response.ErrorMassage = 'خطای داخلی سرور'
@@ -348,56 +391,66 @@ async def list_person(filter: str):
 
 @router.get('/create_admin/{password}', response_model=Response)
 async def admin(password: str):
-
+    Check()
     response = Response()
     if password == 'HADInabati0':
-
-        final_list = []
-        count = db.User_collection.count_documents(
-            {
-                variables.VariablesMongoDb.name: 'super_admin'
-            }
-        )
-
-        if count > 0:
-            data = db.route_collection.find()
-            for item in data:
-                final_list.append(item[variables.VariablesMongoDb.id])
+        counter = db.User_collection.count_documents({
+            variables.VariablesMongoDb.name: 'super_admin'
+        })
+        if counter > 0:
+            route_data = db.route_collection.find()
+            route_array = []
+            for item in route_data:
+                route_array.append(item['_id'])
+            res = db.roles_collection.update_one(
+                {
+                    variables.VariablesMongoDb.name: 'super_admin'
+                },
+                {
+                    "$set": {variables.VariablesMongoDb.items: route_array}
+                })
             db.User_collection.update_one(
                 {
                     variables.VariablesMongoDb.name: 'super_admin'
                 },
                 {
-                    "$set":{
-                        variables.VariablesMongoDb.role : final_list
-                    }
+                    "$set":{variables.VariablesMongoDb.role : res.upserted_id}
                 }
             )
             response.Done = True
-            response.ErrorMessage = 'بروزرسانی انجام شد'
+            response.ErrorMessage = ''
             return response.dict()
+
         else:
-            data = db.route_collection.find()
-            for item in data:
-                final_list.append(item[variables.VariablesMongoDb.id])
+            route_data = db.route_collection.find()
+            route_array = []
+            for item in route_data:
+                route_array.append(item['_id'])
+            result =db.roles_collection.insert_one(
+                {
+                    variables.VariablesMongoDb.name: 'super_admin',
+                    variables.VariablesMongoDb.active: True,
+                    variables.VariablesMongoDb.items: route_array
+                },
+            )
 
             data = model.Create()
             data.name = 'super_admin'
             data.family = 'fava'
-            data.role = final_list
-            data.grade_id =''
+            data.role = result.inserted_id
+            data.grade_id = ''
             data.position_id = ''
             data.national_code = ''
-            res =data.dict()
+            res = data.dict()
             res[variables.VariablesMongoDb.active] = True
             res[variables.VariablesMongoDb.create_at] = datetime.datetime.now()
-            res[variables.VariablesMongoDb.create_by] =''
+            res[variables.VariablesMongoDb.create_by] = ''
             res[variables.VariablesMongoDb.update_history] = []
             res[variables.VariablesMongoDb.last_update] = ''
-
             db.User_collection.insert_one(res)
+
             response.Done = True
-            response.ErrorMessage = 'کاربر ثبت شد'
+            response.ErrorMessage = ''
             return response.dict()
 
     else:
