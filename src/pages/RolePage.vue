@@ -19,19 +19,19 @@
         >
         </q-tree>
       </div>
-      <div class="col-md-6">
-        <label class="labels"> </label>
-        <q-btn @click="insert" label="ثبت" class="inputs q-mb-lg"
-               style="width: 60% ; margin-left: 20% ; margin-right: 20%"
-               rounded label-color="white" color="light-blue-10" outlined dense></q-btn>
-      </div>
-    </div>
-    <div class="col-md-3 col-xs-12">
-      <q-btn class="text absolute-bottom full-width q-mt-lg " @click="update" style="height: 80px" color="grey-10"
-             text-color="white" label="بروز رسانی"></q-btn>
-    </div>
 
+    </div>
+    </div>
+  <div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+      <q-btn @click="insert" label="ثبت" class="inputs full-width q-mb-lg"
+             style="width: 60% ; margin-left: 20% ; margin-right: 20%"
+             rounded label-color="white" color="light-blue-10" outlined dense></q-btn>
+    </div>
   </div>
+  <q-btn class="text  full-width q-mt-lg " @click="update" style="height: 80px" color="grey-10"
+         text-color="white" label="بروز رسانی"></q-btn>
 </template>
 
 <script>
