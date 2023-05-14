@@ -1,5 +1,6 @@
 import datetime
 from typing import Optional
+
 from base.so_base import ObjectId, Model
 
 
@@ -46,14 +47,7 @@ class SimpleResponse(Model):
     Message: Optional[str]
 
 
-class ItemRepairList(Model):
-    activity_id: Optional[ObjectId]
-    description: Optional[str]
-    properties: Optional[list]
-
-
 class RepairListItem(Model):
     name: Optional[str]
-    update_history: Optional[ItemRepairList]
-    activity_properties: Optional[list]
-    update_at :Optional[datetime.datetime]
+    description: Optional[str]
+    update_at: Optional[datetime.datetime]

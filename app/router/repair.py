@@ -1,11 +1,13 @@
 # from schema.user_schema import user_show
 # from base import checking
 import datetime
-from fastapi import APIRouter
-from database import mongodb as db
-from schema import repair_schema as model
-from instances import Mongo as variable
+
 from bson import ObjectId
+from fastapi import APIRouter
+
+from database import mongodb as db
+from instances import Mongo as variable
+from schema import repair_schema as model
 
 # from base.depency import basic_authenticate, Token, create_access_token, permissions
 
@@ -26,7 +28,6 @@ async def create(item: model.Create):
 
         data = item.dict()
         data[variable.VariablesMongoDb.is_updated] = False
-        data[variable.VariablesMongoDb.update_history] = []
         data[variable.VariablesMongoDb.create_at] = datetime.datetime.now()
         data[variable.VariablesMongoDb.update_at] = datetime.datetime.now()
 
@@ -117,18 +118,31 @@ async def stock_repair_list(id: str):
     pipeline = [
         {
             u"$match": {
-                u"stock_id": ObjectId(id)
+                u"_id": ObjectId(id)
             }
         },
         {
             u"$unwind": {
-                u"path": u"$update_history"
+                u"path": u"$repair_history"
+            }
+        },
+        {
+            u"$lookup": {
+                u"from": u"repair",
+                u"localField": u"repair_history",
+                u"foreignField": u"_id",
+                u"as": u"repair"
+            }
+        },
+        {
+            u"$unwind": {
+                u"path": u"$repair"
             }
         },
         {
             u"$lookup": {
                 u"from": u"activity",
-                u"localField": u"update_history.activity_id",
+                u"localField": u"repair.activity_id",
                 u"foreignField": u"_id",
                 u"as": u"activity"
             }
@@ -140,20 +154,19 @@ async def stock_repair_list(id: str):
         },
         {
             u"$project": {
-                u"name": u"$activity.name",
-                u"update_history": u"$update_history",
-                u"properties": u"$activity.properties",
-                "update_at": "$update_at"
+                u"name": u"$name",
+                u"description": u"$repair.description",
+                u"update_at": u"$repair.update_at"
             }
         }
     ]
-    data =list( db.repair_collection.aggregate(pipeline=pipeline))
+
+    data = list(db.stock_collection.aggregate(pipeline=pipeline))
     final_list = []
     for item in data:
         epoch = model.RepairListItem()
         epoch.name = item[variable.VariablesMongoDb.name]
-        epoch.update_history = item[variable.VariablesMongoDb.update_history]
-        epoch.activity_properties = item[variable.VariablesMongoDb.properties]
+        epoch.description = item[variable.VariablesMongoDb.description]
         epoch.update_at = item[variable.VariablesMongoDb.update_at]
         final_list.append(epoch.dict())
 

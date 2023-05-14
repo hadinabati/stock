@@ -75,37 +75,30 @@ async def create(item: model.Create):
 @router.put('/update', response_model=model.Response)
 async def update(items: model.Update):
     response = model.Response()
+    name = variables.VariablesMongoDb()
+    data = {}
     try:
         last_data = db.stock_collection.find_one(
             {
                 variables.VariablesMongoDb.id: ObjectId(items.id)
             }
         )
-        if items.stock_number == items.old_stock_number:
-            pipline = [
-                {
-                    "$match": {
-                        variables.VariablesMongoDb.id: ObjectId(items.id)
-                    }
-                },
-                {
-                    "$set": {
-                        variables.VariablesMongoDb.name: items.name,
-                        variables.VariablesMongoDb.category_id: items.category_id,
-                        variables.VariablesMongoDb.response_id: items.response_id,
-                        variables.VariablesMongoDb.active: items.active,
-                        variables.VariablesMongoDb.position_id: items.position_id,
-                        variables.VariablesMongoDb.has_response: items.has_response,
-                        variables.VariablesMongoDb.info: items.info,
-                        variables.VariablesMongoDb.update_at: datetime.datetime.now(),
-                        variables.VariablesMongoDb.update_by: "",
-                        variables.VariablesMongoDb.is_consumer: items.is_consumer
-                    }
-                },
+        counter = db.stock_collection.count_documents({
+            variables.VariablesMongoDb.stock_number :items.stock_number
+        })
+        if counter <1:
+            if items.has_response is True:
+                person_data = db.User_collection.find_one({name.id: ObjectId(items.response_id)})
 
-            ]
-            # correct stock with  old stock_number
-            db.stock_collection.aggregate(pipeline=pipline)
+                data[name.response_id] = ObjectId(items.response_id)
+                data[name.position_id] = ObjectId(person_data[name.position_id])
+            else:
+                super_admin_data = db.User_collection.find_one({
+                    name.name: name.super_admin
+                })
+                data[name.response_id] = ObjectId(super_admin_data[name.id])
+                data[name.position_id] = ObjectId(items.position_id)
+
             db.stock_collection.update_one(
                 {
                     "_id": ObjectId(items.id)
@@ -128,6 +121,19 @@ async def update(items: model.Update):
                             variables.VariablesMongoDb.type: 'Edit',
                             variables.VariablesMongoDb.count: last_data[variables.VariablesMongoDb.count]
                         }
+                    },
+                    "$set":{
+                        "name": items.name,
+                        "is_consumer": items.is_consumer,
+                        "category_id":ObjectId(items.category_id),
+                        "response_id": data[name.response_id],
+                        "active": items.active,
+                        "position_id": data[name.position_id],
+                        "has_response": items.has_response,
+                        "stock_number": items.stock_number,
+                        "info":items.info,
+                        "old_stock_number": items.old_stock_number,
+                        "count": items.count,
                     }
                 }
             )
@@ -138,70 +144,10 @@ async def update(items: model.Update):
 
             # correct stock with new stock_number
         else:
-            count = db.stock_collection.count_documents({
-                "stock_number": items.stock_number
-            })
-            if count > 0:
-                response.Done = False
-                response.Message = 'شماره اموال مربوط به کالای دیگری است'
-                return response.dict()
-            else:
-                res = db.stock_collection.update_one(
-                    {
-                        "_id": ObjectId(items.id)
-                    },
-                    {
-                        "$set": {
-                            "name": items.name,
-                            "category_id": items.category_id,
-                            "response_id": items.response_id,
-                            "active": items.active,
-                            "position_id": items.position_id,
-                            "has_response": items.has_response,
-                            "info": items.info,
-                            "update_at": datetime.datetime.now(),
-                            "update_by": "",
-                            "is_consumer": items.is_consumer,
-                            "stock_number": items.stock_number,
-                        }
-                    },
+            response.Done = False
+            response.Message = 'شماره اموال مربوط به کالای دیگری است'
+            return response.dict()
 
-                )
-                db.stock_collection.update_one(
-                    {
-                        "_id": ObjectId(items.id)
-                    },
-                    {
-                        "$push": {
-                            "update_history": {
-                                "name": last_data["name"],
-                                "category_id": last_data["category_id"],
-                                "response_id": last_data["response_id"],
-                                "active": last_data["active"],
-                                "position_id": last_data["position_id"],
-                                "has_response": last_data["has_response"],
-                                "info": last_data["info"],
-                                "is_consumer": last_data["is_consumer"],
-                                "stock_number": last_data["stock_number"],
-                                "Description": "شماره اموال تغییر کرده است",
-
-                                variables.VariablesMongoDb.update_at: datetime.datetime.now(),
-                                variables.VariablesMongoDb.users: '',
-                                variables.VariablesMongoDb.type: 'Edit',
-                                variables.VariablesMongoDb.count: last_data[variables.VariablesMongoDb.count]
-                            }
-                        }
-                    }
-                )
-
-                if res.matched_count > 0:
-                    response.Done = True
-                    response.Message = 'عملیات با موفقیت انجام شد'
-                    return response.dict()
-                else:
-                    response.Done = False
-                    response.Message = 'موردی برای تغییر یافت نشده است'
-                    return response.dict()
 
     except IndexError:
         response.Done = False
