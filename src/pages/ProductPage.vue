@@ -74,7 +74,7 @@
                          text-color="white" @click="show_updated(props.row.update_history , props.row.name)"></q-btn>
                 </div>
                 <div class="col-md-2 q-pa-xs ">
-                  <q-btn label="مشخصات" @click="show_info(props.row.stock_number)" class="full-width q-ma-md" dense
+                  <q-btn v-show="!props.row.consumer" label="مشخصات" @click="show_info(props.row.stock_number)" class="full-width q-ma-md" dense
                          color="cyan-9" text-color="white"></q-btn>
                 </div>
               </div>
@@ -95,7 +95,7 @@
 
       <q-card-section class="q-pt-none">
 
-        <div class="row text" v-for="(item , index) in update_history" :key="index">
+        <div class="row text" v-for="(item , index) in repair_history " :key="index">
           <div class="col-2" style="margin-top: auto ; margin-bottom: auto">
             {{ index + 1 }}
           </div>
@@ -120,7 +120,7 @@
               <div class="col-12">
                 <label class="text">تاریخ تعویض:
                   <span class="q-mr-md q-ml-md">
-                  {{ item.updated_at }}
+                  {{ item.update_at }}
               </span>
 
                 </label>
@@ -190,7 +190,7 @@
               <div class="col-12">
                 <label class="text">تاریخ تعویض:
                   <span class="q-mr-md q-ml-md">
-                  {{ item.update_at }}
+                  {{ item.updated_at }}
               </span>
 
                 </label>
@@ -605,7 +605,7 @@ export default {
           if (res.data.data.length > 0) {
             this.repair_history.splice(0, this.repair_history.length)
             for (const item of res.data.data) {
-              const day = new Date(item.update_at.toString());
+              const day = new Date(item.update_at);
               this.repair_history.push({
                 name: item.name,
                 description: item.description,
@@ -661,7 +661,7 @@ export default {
         })
       }
 
-      this.dialogs.repair_list_dialog = true
+      this.dialogs.update_list_dialog = true
     },
     show_info(stock_number) {
       const address = new urls()

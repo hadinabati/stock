@@ -1,36 +1,41 @@
 <template>
-  <div class="row">
-    <p class="headers full-width q-ma-lg"> ایجاد دسترسی</p>
-    <div class="col-md-3"></div>
-    <div class="col-md-6 col-xs-12">
-      <div class="full-width q-mt-lg">
-        <label class="labels"> نام دسته بندی </label>
-        <q-input type="text" maxlength="100" input-style="text-align: center" v-model="info.name"
-                 class="inputs" square rounded label-color="black" color="green-9" outlined dense></q-input>
-      </div>
-      <div class="full-width q-mt-lg">
-        <label class="labels"> دسترسی ها </label>
-        <q-tree style="direction: ltr" class="col-12 col-xs-12"
-                :nodes="info.routes"
-                node-key="id"
-                tick-strategy="strict"
-                v-model:ticked="route_chose"
-                label-key="label"
-        >
-        </q-tree>
-      </div>
+  <q-scroll-area style="height: 80vh">
 
+    <div class="row">
+      <p class="headers full-width q-ma-lg"> ایجاد دسترسی</p>
+      <div class="col-md-3"></div>
+      <div class="col-md-6 col-xs-12">
+        <div class="full-width q-mt-lg">
+          <label class="labels"> نام دسته بندی </label>
+          <q-input type="text" maxlength="100" input-style="text-align: center" v-model="info.name"
+                   class="inputs" square rounded label-color="black" color="green-9" outlined dense></q-input>
+        </div>
+        <div class="full-width q-mt-lg">
+          <label class="labels"> دسترسی ها </label>
+          <q-tree style="direction: ltr" class="col-12 col-xs-12"
+                  :nodes="info.routes"
+                  node-key="id"
+                  tick-strategy="strict"
+                  v-model:ticked="route_chose"
+                  label-key="label"
+          >
+          </q-tree>
+        </div>
+
+      </div>
     </div>
+    <div class="row">
+      <div class="col-md-3"></div>
+      <div class="col-md-6">
+        <q-btn @click="insert" label="ثبت" class="inputs full-width q-mb-lg"
+               style="width: 60% ; margin-left: 20% ; margin-right: 20%"
+               rounded label-color="white" color="light-blue-10" outlined dense></q-btn>
+      </div>
     </div>
-  <div class="row">
-    <div class="col-md-3"></div>
-    <div class="col-md-6">
-      <q-btn @click="insert" label="ثبت" class="inputs full-width q-mb-lg"
-             style="width: 60% ; margin-left: 20% ; margin-right: 20%"
-             rounded label-color="white" color="light-blue-10" outlined dense></q-btn>
-    </div>
-  </div>
-  <q-btn class="text  full-width q-mt-lg " @click="update" style="height: 80px" color="grey-10"
+
+  </q-scroll-area>
+
+  <q-btn class="text absolute-bottom q-mt-lg full-width q-mt-lg " @click="update" style="height: 80px" color="grey-10"
          text-color="white" label="بروز رسانی"></q-btn>
 </template>
 
