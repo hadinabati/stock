@@ -757,7 +757,7 @@ async def crash(data: model.Crash):
                             {variables.VariablesMongoDb.update_at: datetime.datetime.now(),
                              variables.VariablesMongoDb.users: '',
                              variables.VariablesMongoDb.count: number,
-                             variables.VariablesMongoDb.description: data.description,
+                             variables.VariablesMongoDb.description: 'اضافه کردن کالای خراب به انبار خرابی ها',
                              variables.VariablesMongoDb.add: True}
 
                     }
