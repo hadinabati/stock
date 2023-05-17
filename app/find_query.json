@@ -1,0 +1,329 @@
+{ 
+    "_id" : ObjectId("64517485e07886bf03aea1cc"), 
+    "address" : "/grade/create", 
+    "MethodName" : "post", 
+    "TagName" : "grade", 
+    "summary" : "Create"
+}
+{ 
+    "_id" : ObjectId("64517486e07886bf03aea1cd"), 
+    "address" : "/grade/update", 
+    "MethodName" : "put", 
+    "TagName" : "grade", 
+    "summary" : "Update"
+}
+{ 
+    "_id" : ObjectId("64517486e07886bf03aea1ce"), 
+    "address" : "/grade/list", 
+    "MethodName" : "get", 
+    "TagName" : "grade", 
+    "summary" : "Lists"
+}
+{ 
+    "_id" : ObjectId("64517486e07886bf03aea1cf"), 
+    "address" : "/positions/create", 
+    "MethodName" : "post", 
+    "TagName" : "positions", 
+    "summary" : "Create"
+}
+{ 
+    "_id" : ObjectId("64517486e07886bf03aea1d0"), 
+    "address" : "/positions/update", 
+    "MethodName" : "put", 
+    "TagName" : "positions", 
+    "summary" : "Update"
+}
+{ 
+    "_id" : ObjectId("64517486e07886bf03aea1d1"), 
+    "address" : "/positions/list", 
+    "MethodName" : "get", 
+    "TagName" : "positions", 
+    "summary" : "Lists"
+}
+{ 
+    "_id" : ObjectId("64517486e07886bf03aea1d2"), 
+    "address" : "/category/create", 
+    "MethodName" : "post", 
+    "TagName" : "category", 
+    "summary" : "Create"
+}
+{ 
+    "_id" : ObjectId("64517486e07886bf03aea1d3"), 
+    "address" : "/category/update", 
+    "MethodName" : "put", 
+    "TagName" : "category", 
+    "summary" : "Update"
+}
+{ 
+    "_id" : ObjectId("64517486e07886bf03aea1d4"), 
+    "address" : "/category/list", 
+    "MethodName" : "get", 
+    "TagName" : "category", 
+    "summary" : "Lists"
+}
+{ 
+    "_id" : ObjectId("64517486e07886bf03aea1d5"), 
+    "address" : "/category/list/{id}", 
+    "MethodName" : "get", 
+    "TagName" : "category", 
+    "summary" : "List Item"
+}
+{ 
+    "_id" : ObjectId("64517486e07886bf03aea1d6"), 
+    "address" : "/stock/create", 
+    "MethodName" : "post", 
+    "TagName" : "stock", 
+    "summary" : "Create"
+}
+{ 
+    "_id" : ObjectId("64517486e07886bf03aea1d7"), 
+    "address" : "/stock/update", 
+    "MethodName" : "put", 
+    "TagName" : "stock", 
+    "summary" : "Update"
+}
+{ 
+    "_id" : ObjectId("64517486e07886bf03aea1d8"), 
+    "address" : "/stock/list", 
+    "MethodName" : "get", 
+    "TagName" : "stock", 
+    "summary" : "Lists"
+}
+{ 
+    "_id" : ObjectId("64517486e07886bf03aea1d9"), 
+    "address" : "/stock/list_single", 
+    "MethodName" : "get", 
+    "TagName" : "stock", 
+    "summary" : "Single List"
+}
+{ 
+    "_id" : ObjectId("64517486e07886bf03aea1da"), 
+    "address" : "/stock/list_is_consumer", 
+    "MethodName" : "get", 
+    "TagName" : "stock", 
+    "summary" : "Single List"
+}
+{ 
+    "_id" : ObjectId("64517486e07886bf03aea1db"), 
+    "address" : "/person/create", 
+    "MethodName" : "post", 
+    "TagName" : "person", 
+    "summary" : "Create"
+}
+{ 
+    "_id" : ObjectId("64517486e07886bf03aea1dc"), 
+    "address" : "/person/update", 
+    "MethodName" : "put", 
+    "TagName" : "person", 
+    "summary" : "Update"
+}
+{ 
+    "_id" : ObjectId("64517486e07886bf03aea1dd"), 
+    "address" : "/person/delete", 
+    "MethodName" : "delete", 
+    "TagName" : "person", 
+    "summary" : "Delete"
+}
+{ 
+    "_id" : ObjectId("64517486e07886bf03aea1de"), 
+    "address" : "/person/active", 
+    "MethodName" : "patch", 
+    "TagName" : "person", 
+    "summary" : "Active"
+}
+{ 
+    "_id" : ObjectId("64517486e07886bf03aea1df"), 
+    "address" : "/person/list", 
+    "MethodName" : "get", 
+    "TagName" : "person", 
+    "summary" : "Lists"
+}
+{ 
+    "_id" : ObjectId("64517486e07886bf03aea1e0"), 
+    "address" : "/person/list/{filter}", 
+    "MethodName" : "get", 
+    "TagName" : "person", 
+    "summary" : "List Person"
+}
+{ 
+    "_id" : ObjectId("64517486e07886bf03aea1e1"), 
+    "address" : "/person/create_admin/{password}", 
+    "MethodName" : "get", 
+    "TagName" : "person", 
+    "summary" : "Admin"
+}
+{ 
+    "_id" : ObjectId("64517486e07886bf03aea1e2"), 
+    "address" : "/role/create", 
+    "MethodName" : "post", 
+    "TagName" : "roles", 
+    "summary" : "Create"
+}
+{ 
+    "_id" : ObjectId("64517486e07886bf03aea1e3"), 
+    "address" : "/role/lists", 
+    "MethodName" : "get", 
+    "TagName" : "roles", 
+    "summary" : "Lists"
+}
+{ 
+    "_id" : ObjectId("64517486e07886bf03aea1e4"), 
+    "address" : "/role/lists/{id}", 
+    "MethodName" : "get", 
+    "TagName" : "roles", 
+    "summary" : "List Id"
+}
+{ 
+    "_id" : ObjectId("64517486e07886bf03aea1e5"), 
+    "address" : "/role/deleted", 
+    "MethodName" : "delete", 
+    "TagName" : "roles", 
+    "summary" : "Deactivate"
+}
+{ 
+    "_id" : ObjectId("64517486e07886bf03aea1e6"), 
+    "address" : "/role/activated", 
+    "MethodName" : "patch", 
+    "TagName" : "roles", 
+    "summary" : "Activated"
+}
+{ 
+    "_id" : ObjectId("64517486e07886bf03aea1e7"), 
+    "address" : "/role/update", 
+    "MethodName" : "put", 
+    "TagName" : "roles", 
+    "summary" : "Update"
+}
+{ 
+    "_id" : ObjectId("64517486e07886bf03aea1e8"), 
+    "address" : "/routes/check", 
+    "MethodName" : "get", 
+    "TagName" : "routes", 
+    "summary" : "Set Endpoints"
+}
+{ 
+    "_id" : ObjectId("64517486e07886bf03aea1e9"), 
+    "address" : "/routes/lists", 
+    "MethodName" : "get", 
+    "TagName" : "routes", 
+    "summary" : "Lists"
+}
+{ 
+    "_id" : ObjectId("64517486e07886bf03aea1ea"), 
+    "address" : "/activities/create", 
+    "MethodName" : "post", 
+    "TagName" : "activities", 
+    "summary" : "Create"
+}
+{ 
+    "_id" : ObjectId("64517486e07886bf03aea1eb"), 
+    "address" : "/activities/delete", 
+    "MethodName" : "delete", 
+    "TagName" : "activities", 
+    "summary" : "Delete"
+}
+{ 
+    "_id" : ObjectId("64517486e07886bf03aea1ec"), 
+    "address" : "/activities/active", 
+    "MethodName" : "put", 
+    "TagName" : "activities", 
+    "summary" : "Active"
+}
+{ 
+    "_id" : ObjectId("64517486e07886bf03aea1ed"), 
+    "address" : "/activities/list", 
+    "MethodName" : "get", 
+    "TagName" : "activities", 
+    "summary" : "Lists"
+}
+{ 
+    "_id" : ObjectId("64517486e07886bf03aea1ee"), 
+    "address" : "/activities/list/{category_id}", 
+    "MethodName" : "get", 
+    "TagName" : "activities", 
+    "summary" : "List Of Category Id"
+}
+{ 
+    "_id" : ObjectId("64517486e07886bf03aea1ef"), 
+    "address" : "/repair/create", 
+    "MethodName" : "post", 
+    "TagName" : "repair", 
+    "summary" : "Create"
+}
+{ 
+    "_id" : ObjectId("64517486e07886bf03aea1f0"), 
+    "address" : "/repair/list", 
+    "MethodName" : "get", 
+    "TagName" : "repair", 
+    "summary" : "All List"
+}
+{ 
+    "_id" : ObjectId("64517486e07886bf03aea1f1"), 
+    "address" : "/repair/list/{person_id}", 
+    "MethodName" : "get", 
+    "TagName" : "repair", 
+    "summary" : "Person List"
+}
+{ 
+    "_id" : ObjectId("64517486e07886bf03aea1f2"), 
+    "address" : "/repair/update", 
+    "MethodName" : "put", 
+    "TagName" : "repair", 
+    "summary" : "Update"
+}
+{ 
+    "_id" : ObjectId("6464f1005bab73ed0ba1695a"), 
+    "address" : "/stock/consumer_list", 
+    "MethodName" : "get", 
+    "TagName" : "stock", 
+    "summary" : "Consumer List"
+}
+{ 
+    "_id" : ObjectId("6464f1015bab73ed0ba1695b"), 
+    "address" : "/stock/crash_list", 
+    "MethodName" : "get", 
+    "TagName" : "stock", 
+    "summary" : "Crash List"
+}
+{ 
+    "_id" : ObjectId("6464f1015bab73ed0ba1695c"), 
+    "address" : "/stock/accession_add_remove", 
+    "MethodName" : "patch", 
+    "TagName" : "stock", 
+    "summary" : "Accession Add Remove"
+}
+{ 
+    "_id" : ObjectId("6464f1015bab73ed0ba1695d"), 
+    "address" : "/stock/add_consumer_stock", 
+    "MethodName" : "patch", 
+    "TagName" : "stock", 
+    "summary" : "Add Consumer Stock"
+}
+{ 
+    "_id" : ObjectId("6464f1015bab73ed0ba1695e"), 
+    "address" : "/stock/accession", 
+    "MethodName" : "put", 
+    "TagName" : "stock", 
+    "summary" : "Accession"
+}
+{ 
+    "_id" : ObjectId("6464f1015bab73ed0ba1695f"), 
+    "address" : "/stock/crash", 
+    "MethodName" : "put", 
+    "TagName" : "stock", 
+    "summary" : "Crash"
+}
+{ 
+    "_id" : ObjectId("6464f1015bab73ed0ba16960"), 
+    "address" : "/stock/uncrash", 
+    "MethodName" : "put", 
+    "TagName" : "stock", 
+    "summary" : "Crash"
+}
+{ 
+    "_id" : ObjectId("6464f1015bab73ed0ba16961"), 
+    "address" : "/repair/list/stock/{id}", 
+    "MethodName" : "get", 
+    "TagName" : "repair", 
+    "summary" : "Stock Repair List"
+}

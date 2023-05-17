@@ -1,7 +1,7 @@
 # from schema.user_schema import user_show
 # from base import checking
 
-import requests
+import requests as req
 from fastapi import APIRouter, Request
 
 from database import mongodb as db
@@ -14,14 +14,13 @@ from schema import routes_schema as model
 router = APIRouter()
 
 
-@router.post('/check', response_model=model.Response)
-async def set_endpoints(request: Request):
+@router.get('/check', response_model=model.Response)
+def set_endpoints(request: Request):
     # print(request.url.path)
     response = model.Response()
     try:
         url = variables.VariablesMongoDb.urls + 'openapi.json'
-        print(url)
-        data = requests.get('http://127.0.0.1:8000/openapi.json').json()
+        data = req.get(url).json()
         all_key: dict = data['paths']
         route_address = all_key.keys()
         for item in route_address:
@@ -69,12 +68,12 @@ async def set_endpoints(request: Request):
         return response.dict()
 
 
-@router.get('/lists', response_model=model.ListResponse)
-async def lists():
+@router.get('/lists' , response_model=model.ListResponse )
+async  def lists():
     data = db.route_collection.find()
     response = model.ListResponse()
-    final_list = []
-    for item in data:
+    final_list =[]
+    for item in data :
         epoch = model.List()
         epoch.id = item[variables.VariablesMongoDb.id]
         epoch.address = item[variables.VariablesMongoDb.address]

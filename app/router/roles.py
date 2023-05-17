@@ -45,7 +45,11 @@ async def create(item: model.Create):
 
 @router.get('/lists', response_model=model.ResponseList)
 async def lists():
-    data = db.roles_collection.find()
+    data = db.roles_collection.find(
+        {
+            "name":{"$ne":"super_admin"}
+        }
+    )
     response = model.ResponseList()
     final_list = []
     for item in data:
