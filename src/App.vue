@@ -4,13 +4,17 @@
 
 <script>
 import { defineComponent } from 'vue'
+import { setCssVar } from 'quasar'
+setCssVar('aaa', '#d35e5e')
+export default defineComponent ({
 
-export default defineComponent({
-  name: 'App'
+  name: 'App',
+
 })
 </script>
 
 <style>
+
 @font-face {
   font-family: iransans_r;
   src: url(src/fonts/IRANSansX-Regular.woff);

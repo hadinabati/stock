@@ -53,8 +53,8 @@
 </template>
 
 <script>
-import Form1Component from "pages/Form1Component.vue";
-import Form2Component from "pages/Form2Component.vue";
+import Form1Component from "pages/Old_UI/Form1Component.vue";
+import Form2Component from "pages/Old_UI/Form2Component.vue";
 import {reactive} from "vue";
 
 export default {

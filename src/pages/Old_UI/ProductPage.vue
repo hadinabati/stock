@@ -332,7 +332,7 @@ import {reactive, ref} from "vue";
 import urls from "src/Urls";
 import axios from "axios";
 import {useQuasar} from "quasar";
-import UpdateStockComponent from "pages/UpdateStockComponent.vue";
+import UpdateStockComponent from "pages/Old_UI/UpdateStockComponent.vue";
 
 export default {
   name: "ProductPage",

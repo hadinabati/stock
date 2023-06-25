@@ -1,6 +1,7 @@
 export  default class urls{
   constructor() {
     this.main = 'http://127.0.0.1:8000/'
+    // this.main = 'http://10.35.159.10:8000/'
   }
 
   position_list(){
